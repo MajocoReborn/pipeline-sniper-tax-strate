@@ -1,0 +1,31 @@
+[package]
+name = "sniper-tax"
+version = "0.1.0"
+edition = "2021"
+publish = false
+license = "Apache-2.0"
+description = "Pipeline strategy: a launch pool whose buys pay a sniper tax that falls to zero"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "sniper_tax"
+
+[features]
+default = []
+cpi = ["no-entrypoint"]
+no-entrypoint = []
+no-idl = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+custom-heap = []
+custom-panic = []
+anchor-debug = []
+no-log-ix-name = []
+
+[dependencies]
+anchor-lang = { version = "=1.2.2", features = ["init-if-needed"] }
+anchor-spl = "=1.2.2"
+pipeline-strategy-interface = { git = "https://github.com/MetalLegBob/pipeline", rev = "a2d5bfbe62ff61d3ca0ce7a976520da61a0f16c4" }
+sniper-tax-math = { path = "../../crates/sniper-tax-math" }
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }

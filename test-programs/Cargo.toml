@@ -1,0 +1,10 @@
+# Programs used only by the tests, in their own workspace so they never change the
+# lockfile, and so the binary, of the program that is deployed.
+[workspace]
+resolver = "2"
+members = ["test-hook"]
+
+[profile.release]
+overflow-checks = true
+lto = "fat"
+codegen-units = 1

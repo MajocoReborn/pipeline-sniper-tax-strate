@@ -1,0 +1,24 @@
+[package]
+name = "sniper-tax-tests"
+version = "0.1.0"
+edition.workspace = true
+publish = false
+license = "Apache-2.0"
+description = "LiteSVM integration tests: the sniper-tax program against the real Pipeline router"
+
+[dependencies]
+bincode = "1"
+borsh = { version = "1.5", features = ["derive"] }
+litesvm = "=0.18.2"
+sniper-tax-client = { path = "../sniper-tax-client" }
+sniper-tax-math = { path = "../sniper-tax-math" }
+solana-account = "=4.7.0"
+solana-clock = "~3.2.0"
+solana-instruction = "=3.5.1"
+solana-keypair = "=3.1.2"
+solana-pubkey = "=4.3.0"
+solana-signer = "=3.0.1"
+solana-system-interface = { version = "=3.3.0", features = ["bincode"] }
+solana-transaction = { version = "=4.3.0", features = ["serde"] }
+spl-associated-token-account-interface = "2.0.0"
+spl-token-2022-interface = "3.1.2"

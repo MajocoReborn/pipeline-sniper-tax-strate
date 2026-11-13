@@ -1,0 +1,8 @@
+# Host-side crates and tests. The on-chain program will live in its own workspace under
+# `programs/`, because it builds with Solana's platform tools (`cargo build-sbf`).
+[workspace]
+resolver = "2"
+members = ["crates/*"]
+
+[workspace.package]
+edition = "2021"

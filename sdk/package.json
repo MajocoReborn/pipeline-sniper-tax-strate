@@ -1,0 +1,59 @@
+{
+    "name": "@majocoreborn/sniper-tax-sdk",
+    "version": "0.1.0",
+    "description": "TypeScript SDK for the sniper-tax launch pool on the Pipeline router: addresses, account decoders, instruction builders, the tax curve and exact quotes",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/MajocoReborn/pipeline-sniper-tax-strate.git",
+        "directory": "sdk"
+    },
+    "homepage": "https://github.com/MajocoReborn/pipeline-sniper-tax-strate/tree/main/sdk",
+    "bugs": "https://github.com/MajocoReborn/pipeline-sniper-tax-strate/issues",
+    "keywords": [
+        "solana",
+        "pipeline",
+        "launchpad",
+        "sniper-tax",
+        "sdk"
+    ],
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        }
+    },
+    "files": [
+        "dist",
+        "src"
+    ],
+    "sideEffects": false,
+    "engines": {
+        "node": ">=20.19"
+    },
+    "scripts": {
+        "build": "tsc -p tsconfig.build.json",
+        "prepack": "npm run build",
+        "typecheck": "tsc -p tsconfig.json --noEmit",
+        "test": "npm run typecheck && npm run format:check && vitest run",
+        "vectors": "cargo run -q -p sniper-tax-client --example ts_vectors > test/vectors.json",
+        "format": "prettier --write .",
+        "format:check": "prettier --check ."
+    },
+    "dependencies": {
+        "@pipeline-sol/sdk": "^0.1.1",
+        "@solana/kit": "^8.6.0"
+    },
+    "devDependencies": {
+        "@types/node": "24.19.2",
+        "prettier": "3.9.10",
+        "typescript": "7.0.2",
+        "vitest": "5.1.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}

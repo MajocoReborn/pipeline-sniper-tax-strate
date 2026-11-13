@@ -1,0 +1,17 @@
+[package]
+name = "sniper-tax-client"
+version = "0.1.0"
+edition.workspace = true
+publish = false
+license = "Apache-2.0"
+description = "Addresses, account layouts and instruction builders for the sniper-tax Pipeline strategy"
+
+[dependencies]
+borsh = { version = "1.5", features = ["derive"] }
+pipeline-client = { git = "https://github.com/MetalLegBob/pipeline", rev = "a2d5bfbe62ff61d3ca0ce7a976520da61a0f16c4" }
+pipeline-strategy-interface = { git = "https://github.com/MetalLegBob/pipeline", rev = "a2d5bfbe62ff61d3ca0ce7a976520da61a0f16c4" }
+sniper-tax-math = { path = "../sniper-tax-math" }
+
+[dev-dependencies]
+# For `examples/ts_vectors.rs`, which writes the TypeScript client's test vectors.
+serde_json = "1"

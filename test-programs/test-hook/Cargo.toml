@@ -1,0 +1,22 @@
+[package]
+name = "test-hook"
+version = "0.1.0"
+edition = "2021"
+publish = false
+license = "Apache-2.0"
+description = "Token-2022 transfer hook for the sniper-tax tests: counts transfers in an extra account"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "test_hook"
+
+[features]
+# Expected by solana-program's entrypoint! macro.
+custom-heap = []
+custom-panic = []
+
+[dependencies]
+solana-program = "3"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
