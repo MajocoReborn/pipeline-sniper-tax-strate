@@ -1,0 +1,12 @@
+[package]
+name = "sniper-tax-math"
+version = "0.1.0"
+edition.workspace = true
+publish = false
+license = "Apache-2.0"
+description = "Pure maths for the Pipeline sniper-tax strategy: tax schedule, tax split and constant-product pricing"
+
+[dependencies]
+
+[dev-dependencies]
+proptest = "1"

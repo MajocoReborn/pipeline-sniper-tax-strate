@@ -1,0 +1,82 @@
+{
+  "schema": "pipeline-strategy-metadata/1",
+  "name": "Sniper Tax Launch",
+  "description": "Launch pool with a sniper tax: buys right after launch pay up to 99% tax on their input, falling linearly to 0% within minutes (for example 90 or 600 seconds). The creator trades tax-free and receives 90% of the tax; 10% goes to the protocol. Sells are never taxed. Launch liquidity is locked for good. The launch token must have no mint or freeze authority and no transfer hook; a transfer fee on either mint must be fixed (no fee authority) and at most 5%. Pools are created by the project's own launcher, because their address includes the creator and the tax schedule.",
+  "links": {
+    "source": "https://github.com/MajocoReborn/pipeline-sniper-tax-strategy",
+    "docs": "https://github.com/MajocoReborn/pipeline-sniper-tax-strategy/blob/main/docs/INTEGRATION.md"
+  },
+  "init": {
+    "args": [
+      { "name": "creator", "type": "pubkey", "label": "Creator wallet (tax-exempt, receives the tax)" },
+      { "name": "tax_start_bps", "type": "u16", "label": "Tax at launch, in basis points (at most 9900)" },
+      { "name": "tax_end_bps", "type": "u16", "label": "Tax after the window, in basis points (at most 500)" },
+      { "name": "tax_duration_secs", "type": "u32", "label": "Length of the tax window in seconds (60 to 1800)" }
+    ],
+    "accounts": [
+      { "name": "token_mint", "source": "input:token_mint" },
+      { "name": "quote_mint", "source": "input:quote_mint" },
+      { "name": "token_vault", "source": "input:token_vault" },
+      { "name": "quote_vault", "source": "input:quote_vault" },
+      { "name": "token_program_token", "source": "input:token_program_token" },
+      { "name": "token_program_quote", "source": "input:token_program_quote" },
+      { "name": "associated_token_program", "source": "fixed:ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL" },
+      { "name": "config", "source": "pda:EZwLuZ8mSiBoeKtbHwQK4kxCqqj4JuureT1kHpTK3i6b:str:config" }
+    ]
+  },
+  "actions": [
+    {
+      "name": "launch",
+      "label": "Launch (creator only)",
+      "discriminator": "99f15de116454a3d",
+      "args": [
+        { "name": "amount_token", "type": "u64", "label": "Tokens to put in the pool", "decimals_of": "mint:0" },
+        { "name": "amount_quote", "type": "u64", "label": "Quote to put in the pool", "decimals_of": "mint:1" }
+      ],
+      "accounts": [
+        { "name": "creator", "source": "wallet", "signer": true, "writable": true },
+        { "name": "pool", "source": "market_state", "writable": true },
+        { "name": "token_mint", "source": "mint:0" },
+        { "name": "quote_mint", "source": "mint:1" },
+        { "name": "creator_token", "source": "wallet_token_account:0", "writable": true },
+        { "name": "creator_quote", "source": "wallet_token_account:1", "writable": true },
+        { "name": "token_vault", "source": "vault:0", "writable": true },
+        { "name": "quote_vault", "source": "vault:1", "writable": true },
+        { "name": "token_program_token", "source": "token_program:0" },
+        { "name": "token_program_quote", "source": "token_program:1" },
+        { "name": "config", "source": "pda:EZwLuZ8mSiBoeKtbHwQK4kxCqqj4JuureT1kHpTK3i6b:str:config" },
+        { "name": "treasury", "source": "fixed:CUiq3QQbXMsrgCpiN423zr2NTrdfPRuGUy9EQKQ6CGap", "writable": true },
+        { "name": "system_program", "source": "system_program" }
+      ]
+    },
+    {
+      "name": "claim_tax",
+      "label": "Claim tax (creator only)",
+      "discriminator": "6d1273d9254a6e1e",
+      "args": [],
+      "accounts": [
+        { "name": "creator", "source": "wallet", "signer": true },
+        { "name": "pool", "source": "market_state", "writable": true },
+        { "name": "quote_mint", "source": "mint:1" },
+        { "name": "quote_vault", "source": "vault:1", "writable": true },
+        { "name": "destination", "source": "wallet_token_account:1", "writable": true },
+        { "name": "token_program_quote", "source": "token_program:1" }
+      ]
+    },
+    {
+      "name": "sweep_protocol_fees",
+      "label": "Sweep protocol tax to the treasury",
+      "discriminator": "75e1f04b47c32c2b",
+      "args": [],
+      "accounts": [
+        { "name": "pool", "source": "market_state", "writable": true },
+        { "name": "config", "source": "pda:EZwLuZ8mSiBoeKtbHwQK4kxCqqj4JuureT1kHpTK3i6b:str:config" },
+        { "name": "quote_mint", "source": "mint:1" },
+        { "name": "quote_vault", "source": "vault:1", "writable": true },
+        { "name": "treasury", "source": "fixed:CUiq3QQbXMsrgCpiN423zr2NTrdfPRuGUy9EQKQ6CGap" },
+        { "name": "treasury_quote", "source": "pda:ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL:key:fixed:CUiq3QQbXMsrgCpiN423zr2NTrdfPRuGUy9EQKQ6CGap,key:token_program:1,key:mint:1", "writable": true },
+        { "name": "token_program_quote", "source": "token_program:1" }
+      ]
+    }
+  ]
+}

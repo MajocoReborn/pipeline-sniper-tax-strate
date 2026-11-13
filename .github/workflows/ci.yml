@@ -1,0 +1,103 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-24.04
+    env:
+      # Test binaries link every Solana crate; without debug info they're a fraction of
+      # the size.
+      CARGO_PROFILE_DEV_DEBUG: "0"
+      CARGO_INCREMENTAL: "0"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache cargo and Solana tools
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cargo/bin/cargo-build-sbf
+            ~/.cargo/bin/cargo-test-sbf
+            ~/.cache/solana
+            target
+            test-programs/target
+          key: ${{ runner.os }}-v2-${{ hashFiles('Cargo.lock', 'programs/Cargo.lock', 'test-programs/Cargo.lock', 'rust-toolchain.toml') }}
+          restore-keys: ${{ runner.os }}-v2-
+
+      - name: No keypairs in the repository
+        run: scripts/check-no-keypairs.sh
+
+      - name: Install cargo-build-sbf (sBPF v3 toolchain)
+        run: |
+          if ! cargo build-sbf --version 2>/dev/null | grep -q "4.6.0"; then
+            cargo install cargo-build-sbf --version 4.6.0 --locked --force
+          fi
+
+      - name: Check formatting
+        run: |
+          cargo fmt --all -- --check
+          (cd programs && cargo fmt --all -- --check)
+          (cd test-programs && cargo fmt --all -- --check)
+
+      - name: Lint
+        run: |
+          cargo clippy --workspace --all-targets -- -D warnings
+          (cd programs && cargo clippy --all-targets -- -D warnings)
+          (cd test-programs && cargo clippy --all-targets -- -D warnings)
+
+      # The binary depends on the repository's path on disk (see scripts/build-program.sh),
+      # so the program is built at the path the devnet version was built at, and must come
+      # out byte for byte the same. The tests below run against that exact binary.
+      - name: Build the program and check it is the devnet version
+        run: |
+          sudo mkdir -p /home/user
+          sudo chown "$(id -u):$(id -g)" /home/user
+          scripts/build-program.sh
+
+      - name: The program on devnet is this binary
+        run: scripts/check-devnet-program.sh
+
+      - name: Build the test programs
+        working-directory: test-programs
+        run: cargo build-sbf
+
+      - name: Fetch the Pipeline router from devnet (pinned)
+        run: scripts/fetch-pipeline-router.sh
+
+      - name: Test
+        run: cargo test --workspace
+
+      - name: The TypeScript SDK's test vectors are up to date
+        run: |
+          cargo run -q -p sniper-tax-client --example ts_vectors > sdk/test/vectors.json
+          git diff --exit-code sdk/test/vectors.json
+
+  sdk:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: sdk
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: sdk/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck, format and test
+        run: npm test
+
+      - name: Build and pack
+        run: |
+          npm run build
+          npm pack --dry-run
