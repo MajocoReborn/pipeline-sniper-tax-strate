@@ -5,11 +5,11 @@
     "license": "Apache-2.0",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/MajocoReborn/pipeline-sniper-tax-strate.git",
+        "url": "git+https://github.com/MajocoReborn/pipeline-sniper-tax-strategy.git",
         "directory": "sdk"
     },
-    "homepage": "https://github.com/MajocoReborn/pipeline-sniper-tax-strate/tree/main/sdk",
-    "bugs": "https://github.com/MajocoReborn/pipeline-sniper-tax-strate/issues",
+    "homepage": "https://github.com/MajocoReborn/pipeline-sniper-tax-strategy/tree/main/sdk",
+    "bugs": "https://github.com/MajocoReborn/pipeline-sniper-tax-strategy/issues",
     "keywords": [
         "solana",
         "pipeline",

@@ -6,7 +6,7 @@ For a new session. The design and background are in [`PLAN.md`](PLAN.md), the re
 and what to watch out for.
 
 **Latest step (13 November):** the protocol has its own repository,
-`MajocoReborn/pipeline-sniper-tax-strate`. It came from `MajocoReborn/Pipeline-Sniper-Tax`
+`MajocoReborn/pipeline-sniper-tax-strategy`. It came from `MajocoReborn/Pipeline-Sniper-Tax`
 (up to commit `7b7517c`), which keeps the launch site (`app/`) and now installs the
 TypeScript SDK from here. History before the move is in that repository.
 
@@ -25,8 +25,7 @@ TypeScript SDK from here. History before the move is in that repository.
 
 ## Repo and branch
 
-- Repo: `MajocoReborn/pipeline-sniper-tax-strate` (the owner asked for
-  `pipeline-sniper-tax-strategy`; the repository on GitHub has the shorter name).
+- Repo: `MajocoReborn/pipeline-sniper-tax-strategy`.
 - New work starts on a fresh branch from `main`.
 - CI (`.github/workflows/ci.yml`) has two jobs:
   - `build-and-test`: formatting and clippy; the program built at the fixed path and checked
@@ -104,7 +103,7 @@ cargo mutants -p sniper-tax-math
 1. **The binary depends on the source, the toolchain and the path.**
    - Anchor puts the file and line number in error messages, so every shifted line in `programs/sniper-tax/src/*.rs` gives a different binary.
    - `cargo-build-sbf` 4.6.0 (platform tools v1.58) and `programs/Cargo.lock` determine the result.
-   - **The path matters too** (found on 13 November; the earlier handoff said it didn't). `programs/` is its own workspace and `crates/sniper-tax-math` lies outside it, so Cargo identifies that crate by its absolute path. The path goes into the hash in every symbol name, the symbols are ordered by name, and so the layout of the binary moves (its size doesn't). The same source gave `1992abea…` in `/home/user/pipeline-sniper-tax-strate`, `cbe82f94…` in another directory, and `9f24dafa…` only in `/home/user/Pipeline-Sniper-Tax`, where the cloud sessions built the devnet version. `scripts/build-program.sh` therefore builds there. CI does the same and fails unless the result is `9f24dafa…`, so the tests run against the exact devnet binary.
+   - **The path matters too** (found on 13 November; the earlier handoff said it didn't). `programs/` is its own workspace and `crates/sniper-tax-math` lies outside it, so Cargo identifies that crate by its absolute path. The path goes into the hash in every symbol name, the symbols are ordered by name, and so the layout of the binary moves (its size doesn't). The same source gave `1992abea…` in `/home/user/pipeline-sniper-tax-strategy`, `cbe82f94…` in another directory, and `9f24dafa…` only in `/home/user/Pipeline-Sniper-Tax`, where the cloud sessions built the devnet version. `scripts/build-program.sh` therefore builds there. CI does the same and fails unless the result is `9f24dafa…`, so the tests run against the exact devnet binary.
    - The current source gives sha256 `9f24dafa0168585de8e15a519a178ed14e6e2bb7d3f8443862eff1db6379f7cd` (375,568 bytes). Pipeline's API and `solana-verify get-program-hash` show the same program as `987678b54d6f68a6…`: they hash the code with its trailing zero bytes removed, not the whole `.so` file.
    - Devnet runs this version since 10 November (slot 520838510). Before that it ran `222ee7691fe1b9ca344f0831b5b9ead3b863a59ba38c26c5384a105a92f09c3a`.
    - **The next program change** needs a deploy anyway. Make the build path-independent then: move `sniper-tax-math` inside the `programs/` workspace (or build in a container with a fixed path, as `solana-verify` does) and drop the fixed path from `scripts/build-program.sh`.
@@ -162,8 +161,8 @@ report the metadata `valid` again. Only after that may the old repository drop i
 2. Build, from this repository, with the script that builds at the path the devnet version was built at (pitfall 1):
 
    ```sh
-   git clone https://github.com/MajocoReborn/pipeline-sniper-tax-strate.git
-   cd pipeline-sniper-tax-strate
+   git clone https://github.com/MajocoReborn/pipeline-sniper-tax-strategy.git
+   cd pipeline-sniper-tax-strategy
    sudo mkdir -p /home/user && sudo chown "$USER" /home/user   # once
    scripts/build-program.sh                                    # fails unless the hash is 9f24dafa…
    ```

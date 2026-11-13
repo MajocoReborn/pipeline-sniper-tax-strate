@@ -419,7 +419,7 @@ Pipeline-Sniper-Tax/
 - **Phase 6, fixes (10 November):** H1, H2, L1, L2, I1 and I2 fixed in the program, following B10–B13. The new binary (sha256 `9f24dafa0168585de8e15a519a178ed14e6e2bb7d3f8443862eff1db6379f7cd`) is live on devnet since 10 November (slot 520838510). Tests in `findings.rs` (6) and `transfer_hook.rs` (now on the quote mint). A manual mutation round on the new checks: 20 of 20 mutants caught.
 - **Docs in English (10 November):** README, PLAN, HANDOFF and SECURITY-REVIEW translated from Dutch.
 - **Launch site (10 November):** the plan in [`LAUNCH-SITE.md`](https://github.com/MajocoReborn/Pipeline-Sniper-Tax/blob/main/docs/LAUNCH-SITE.md) is approved; milestone 1, the TypeScript client in `app/`, is done.
-- **Own repository (13 November):** the protocol moved from `MajocoReborn/Pipeline-Sniper-Tax` (which keeps the launch site) to `MajocoReborn/pipeline-sniper-tax-strate`, with the program unchanged (sha256 `9f24dafa…`). The TypeScript client became the npm package in `sdk/`, and [`INTEGRATION.md`](INTEGRATION.md) is the guide for launchpads.
+- **Own repository (13 November):** the protocol moved from `MajocoReborn/Pipeline-Sniper-Tax` (which keeps the launch site) to `MajocoReborn/pipeline-sniper-tax-strategy`, with the program unchanged (sha256 `9f24dafa…`). The TypeScript client became the npm package in `sdk/`, and [`INTEGRATION.md`](INTEGRATION.md) is the guide for launchpads.
 
 ## 11. Decisions
 

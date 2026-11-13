@@ -3,8 +3,8 @@
   "name": "Sniper Tax Launch",
   "description": "Launch pool with a sniper tax: buys right after launch pay up to 99% tax on their input, falling linearly to 0% within minutes (for example 90 or 600 seconds). The creator trades tax-free and receives 90% of the tax; 10% goes to the protocol. Sells are never taxed. Launch liquidity is locked for good. The launch token must have no mint or freeze authority and no transfer hook; a transfer fee on either mint must be fixed (no fee authority) and at most 5%. Pools are created by the project's own launcher, because their address includes the creator and the tax schedule.",
   "links": {
-    "source": "https://github.com/MajocoReborn/pipeline-sniper-tax-strate",
-    "docs": "https://github.com/MajocoReborn/pipeline-sniper-tax-strate/blob/main/docs/INTEGRATION.md"
+    "source": "https://github.com/MajocoReborn/pipeline-sniper-tax-strategy",
+    "docs": "https://github.com/MajocoReborn/pipeline-sniper-tax-strategy/blob/main/docs/INTEGRATION.md"
   },
   "init": {
     "args": [

@@ -37,7 +37,7 @@ use spl_token_2022_interface::instruction::AuthorityType;
 
 const DEFAULT_RPC: &str = "https://api.devnet.solana.com";
 const METADATA_URI: &str =
-    "https://raw.githubusercontent.com/MajocoReborn/pipeline-sniper-tax-strate/main/metadata/sniper-tax.devnet.json";
+    "https://raw.githubusercontent.com/MajocoReborn/pipeline-sniper-tax-strategy/main/metadata/sniper-tax.devnet.json";
 /// Refuse to register if the router's listing fee is above this.
 const MAX_LISTING_FEE: u64 = 20_000_000;
 
