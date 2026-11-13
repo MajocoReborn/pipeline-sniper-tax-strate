@@ -20,8 +20,8 @@ TypeScript SDK from here. History before the move is in that repository.
   `verifyPoolKeys` added. Not yet on npm: see "Open items".
 - `docs/INTEGRATION.md`: launching a pool, reading the tax, trading, claiming, and every fee
   with its cap.
-- The devnet tool has a new command, `metadata`, to point the router registration at the
-  metadata file in this repository.
+- The devnet tool has a new command, `metadata`. The owner used it the same day to point the
+  router registration at the metadata file in this repository (see "Devnet").
 
 ## Repo and branch
 
@@ -124,7 +124,7 @@ cargo mutants -p sniper-tax-math
 16. **The public devnet RPC rate-limits bursts** (HTTP 429), for example right after a launch. Wait and retry.
 17. **Listing a creator's pools needs `getProgramAccounts` with filters.** The public devnet RPC allows it; some mainnet RPC providers restrict or charge extra for it. Check that before choosing a mainnet RPC, or a creator's pools can't be listed.
 18. **The TypeScript SDK mirrors the Rust client.** After changing `crates/sniper-tax-client`, the maths or a layout in the program, regenerate `sdk/test/vectors.json` (`cd sdk && npm run vectors`) and make the TypeScript match. CI regenerates the vectors and fails if the committed file differs.
-19. **The registration's metadata URI points at a file on GitHub.** Until the owner runs `metadata` (see "Devnet"), it points at the old repository, `MajocoReborn/Pipeline-Sniper-Tax`, which keeps `metadata/sniper-tax.devnet.json` for that reason. Keep both copies the same until then. The router allows at most 200 bytes.
+19. **The registration's metadata URI points at a file on GitHub:** `metadata/sniper-tax.devnet.json` on this repository's `main` (see "Devnet"). Keep the repository public and the file at that path, or Pipeline's API reports the metadata unreachable; to move it, change `METADATA_URI` in the devnet tool and run `metadata`. The router allows at most 200 bytes.
 
 ## Devnet
 
@@ -136,17 +136,19 @@ cargo mutants -p sniper-tax-math
 | Config | `6wCct5q2tQ2WGfbtLcEzaH756aGnkMuSnnexaHmquL93`: 10% tax share, 0.01 SOL launch fee. `pending_admin` is empty (checked after the upgrade) |
 | Demo pool | `GeajhDYc24MyRecNv1a69nSsa2kdUtwbhLec6xpqVG3B` |
 
-**Pointing the registration at this repository.** The router registration's metadata URI
-still points at `https://raw.githubusercontent.com/MajocoReborn/Pipeline-Sniper-Tax/main/metadata/sniper-tax.devnet.json`.
-To move it here, the upgrade authority runs, after this repository's `main` holds the
-metadata (and while the repository is public):
+**The registration's metadata.** Since 13 November the router registration points at
+`https://raw.githubusercontent.com/MajocoReborn/pipeline-sniper-tax-strategy/main/metadata/sniper-tax.devnet.json`
+(before: the same file in `MajocoReborn/Pipeline-Sniper-Tax`). The owner moved it with the
+devnet tool, signed by the upgrade authority `CUiq3QQ…` (transaction
+`3k6KzNwkDMrd81kJq5s1vjx8bS2aSkqc6R6zqJ7RssGsdFPBb8VCp2yuRNKEZzrkv2SLHT34tQYyWNcvYhTre8Bt`,
+slot 521953366, finalized; the URL serves the file). The old repository no longer holds a
+copy. To point it elsewhere later, change `METADATA_URI` and run:
 
 ```sh
 KEYPAIR=<path-to-wallet.json> cargo run -p sniper-tax-devnet -- metadata
 ```
 
-It prints the current and the new URI and sends `update_metadata`. Pipeline's API should then
-report the metadata `valid` again. Only after that may the old repository drop its copy.
+It prints the current and the new URI and sends `update_metadata`.
 
 **Deploying a new version.** Upgrading at the same address needs the devnet wallet `CUiq3QQ…`, and that key is never in a cloud session. The owner therefore does the upgrade locally (choice 4a). On Windows, use WSL.
 
@@ -198,7 +200,7 @@ After the upgrade nothing else is needed on-chain: the pool and config layouts a
 
 The new wallet was derived with Phantom's path (`solana-keygen recover 'prompt://?key=0/0'`), so its seed phrase gives the same address in a wallet app. `solana-keygen new` derives without a path, which gives a different address from the same words.
 
-**Administration.** `config` moves the treasury (keeping the fees) and, with `ADMIN`, proposes a new admin. The new admin takes over with `accept-admin`, with their own wallet as `KEYPAIR`. Until then, the current admin stays in charge. The metadata URI in the registration points to `main` of a public repository (see "Pointing the registration at this repository").
+**Administration.** `config` moves the treasury (keeping the fees) and, with `ADMIN`, proposes a new admin. The new admin takes over with `accept-admin`, with their own wallet as `KEYPAIR`. Until then, the current admin stays in charge. The metadata URI in the registration points to `main` of a public repository (see "The registration's metadata").
 
 ## Cleaned up
 
@@ -263,12 +265,11 @@ In addition, the unchanged source (commit `8bb831b`) built exactly `222ee769…`
    and the imports otherwise, before the first release. Then add `NPM_TOKEN` as a repository
    secret and push a tag `sdk-v0.1.0`. Until then the launch site installs a tarball built
    from a pinned commit of this repository (see its `app/vendor/README.md`).
-2. **Move the metadata URI** with `metadata` (above), then let the old repository drop its copy.
-3. **Path-independent build** at the next program change (pitfall 1).
-4. **Phase 6:** still open from [`SECURITY-REVIEW.md`](SECURITY-REVIEW.md): M1 and M2
+2. **Path-independent build** at the next program change (pitfall 1).
+3. **Phase 6:** still open from [`SECURITY-REVIEW.md`](SECURITY-REVIEW.md): M1 and M2
    (operational), L3 (display extensions) and the residual risk of a hook on the quote mint.
    After that, an external audit.
-5. **Before mainnet:**
+4. **Before mainnet:**
    - a dedicated program keypair;
    - the treasury and the config admin on a multisig, for example Squads;
    - decide whether to freeze the upgrade authority;
