@@ -81,6 +81,11 @@ export type LaunchPool = {
     launchFeeLamports: bigint;
     /** Unix seconds; 0 while pending. */
     launchTs: bigint;
+    /**
+     * The slot the pool launched in; 0 while pending, and for pools launched before the
+     * launch block existed. The tax on buys in this slot and the next goes to the protocol.
+     */
+    launchSlot: bigint;
     reserved: ReadonlyUint8Array;
 };
 
@@ -105,7 +110,8 @@ export function getLaunchPoolCodec(): Codec<LaunchPool> {
         ['protocolTaxShareBps', getU16Codec()],
         ['launchFeeLamports', getU64Codec()],
         ['launchTs', getI64Codec()],
-        ['reserved', fixCodecSize(getBytesCodec(), 64)],
+        ['launchSlot', getU64Codec()],
+        ['reserved', fixCodecSize(getBytesCodec(), 56)],
     ]);
 }
 

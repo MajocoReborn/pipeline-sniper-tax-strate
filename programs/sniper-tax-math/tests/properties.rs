@@ -17,24 +17,23 @@ fn tax_rate() -> impl Strategy<Value = u16> {
     0..=MAX_START_BPS
 }
 
+/// Any protocol share a trade can see: up to the cap, or all of it in the launch block.
+fn protocol_share() -> impl Strategy<Value = u16> {
+    prop_oneof![0..=MAX_PROTOCOL_TAX_SHARE_BPS, Just(BPS as u16)]
+}
+
 /// Pricing with non-empty reserves below 2^63, so a reserve product fits in a u128 even
 /// after a trade.
 fn pricing() -> impl Strategy<Value = Pricing> {
     let reserve = 1..(1u64 << 63);
-    (
-        reserve.clone(),
-        reserve,
-        tax_rate(),
-        0..=MAX_PROTOCOL_TAX_SHARE_BPS,
+    (reserve.clone(), reserve, tax_rate(), protocol_share()).prop_map(
+        |(reserve_in, reserve_out, tax_bps, protocol_share_bps)| Pricing {
+            reserve_in,
+            reserve_out,
+            tax_bps,
+            protocol_share_bps,
+        },
     )
-        .prop_map(
-            |(reserve_in, reserve_out, tax_bps, protocol_share_bps)| Pricing {
-                reserve_in,
-                reserve_out,
-                tax_bps,
-                protocol_share_bps,
-            },
-        )
 }
 
 fn product(a: u64, b: u64) -> u128 {
@@ -148,8 +147,33 @@ proptest! {
         let shares = split_tax(tax, share);
         prop_assert_eq!(u128::from(shares.creator) + u128::from(shares.protocol), u128::from(tax));
         prop_assert!(u128::from(shares.protocol) * u128::from(BPS) <= u128::from(tax) * u128::from(share));
-        // The protocol never takes more than 20%, so the creator always keeps the most.
+        // Outside the launch block the protocol never takes more than 30%, so the creator
+        // always keeps the most.
         prop_assert!(shares.creator >= shares.protocol);
+    }
+
+    #[test]
+    fn the_launch_block_tax_goes_to_the_protocol_in_full(
+        tax in any::<u64>(),
+        recorded in 0..=MAX_PROTOCOL_TAX_SHARE_BPS,
+        launch_slot in 1..u64::MAX,
+        offset in 0..LAUNCH_BLOCK_SLOTS,
+    ) {
+        let slot = launch_slot.saturating_add(offset);
+        let shares = split_tax(tax, protocol_share_at(recorded, launch_slot, slot));
+        prop_assert_eq!(shares.protocol, tax);
+        prop_assert_eq!(shares.creator, 0);
+    }
+
+    #[test]
+    fn after_the_launch_block_the_recorded_share_applies(
+        recorded in 0..=MAX_PROTOCOL_TAX_SHARE_BPS,
+        launch_slot in 0..(u64::MAX / 2),
+        after in LAUNCH_BLOCK_SLOTS..(u64::MAX / 2),
+    ) {
+        prop_assert_eq!(protocol_share_at(recorded, launch_slot, launch_slot + after), recorded);
+        // An unknown launch slot never triggers the launch block.
+        prop_assert_eq!(protocol_share_at(recorded, 0, after), recorded);
     }
 
     #[test]

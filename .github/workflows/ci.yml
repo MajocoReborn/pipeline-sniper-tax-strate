@@ -25,9 +25,10 @@ jobs:
             ~/.cargo/bin/cargo-test-sbf
             ~/.cache/solana
             target
+            programs/target
             test-programs/target
-          key: ${{ runner.os }}-v2-${{ hashFiles('Cargo.lock', 'programs/Cargo.lock', 'test-programs/Cargo.lock', 'rust-toolchain.toml') }}
-          restore-keys: ${{ runner.os }}-v2-
+          key: ${{ runner.os }}-v3-${{ hashFiles('Cargo.lock', 'programs/Cargo.lock', 'test-programs/Cargo.lock', 'rust-toolchain.toml') }}
+          restore-keys: ${{ runner.os }}-v3-
 
       - name: No keypairs in the repository
         run: scripts/check-no-keypairs.sh
@@ -50,16 +51,12 @@ jobs:
           (cd programs && cargo clippy --all-targets -- -D warnings)
           (cd test-programs && cargo clippy --all-targets -- -D warnings)
 
-      # The binary depends on the repository's path on disk (see scripts/build-program.sh),
-      # so the program is built at the path the devnet version was built at, and must come
-      # out byte for byte the same. The tests below run against that exact binary.
-      - name: Build the program and check it is the devnet version
-        run: |
-          sudo mkdir -p /home/user
-          sudo chown "$(id -u):$(id -g)" /home/user
-          scripts/build-program.sh
+      # The build is reproducible (scripts/build-program.sh): it must come out byte for byte
+      # as pinned, and the tests below run against that exact binary.
+      - name: Build the program and check its hash
+        run: scripts/build-program.sh
 
-      - name: The program on devnet is this binary
+      - name: Devnet runs the pinned version
         run: scripts/check-devnet-program.sh
 
       - name: Build the test programs

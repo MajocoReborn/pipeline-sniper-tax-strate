@@ -11,9 +11,10 @@
 use serde_json::{json, Value};
 use sniper_tax_client::*;
 use sniper_tax_math::{
-    applicable_tax_bps, gross_for_effective, in_given_out, out_given_in, split_gross, split_tax,
-    Pricing, TaxSchedule, MAX_DURATION_SECS, MAX_END_BPS, MAX_LAUNCH_FEE_LAMPORTS,
-    MAX_PROTOCOL_TAX_SHARE_BPS, MAX_START_BPS, MIN_DURATION_SECS,
+    applicable_tax_bps, gross_for_effective, in_given_out, out_given_in, protocol_share_at,
+    split_gross, split_tax, Pricing, TaxSchedule, LAUNCH_BLOCK_SLOTS, MAX_DURATION_SECS,
+    MAX_END_BPS, MAX_LAUNCH_FEE_LAMPORTS, MAX_PROTOCOL_TAX_SHARE_BPS, MAX_START_BPS,
+    MIN_DURATION_SECS,
 };
 
 fn hex(bytes: &[u8]) -> String {
@@ -151,7 +152,9 @@ fn accounts() -> Value {
         protocol_tax_share_bps: 1_000,
         launch_fee_lamports: 10_000_000,
         launch_ts: 1_800_000_000,
-        reserved: [0; 64],
+        // Above 2^53, so the TypeScript side must read it as a bigint.
+        launch_slot: (1 << 60) + 7,
+        reserved: [0; 56],
     };
     let pending = LaunchPool {
         status: PoolStatus::Pending,
@@ -160,6 +163,7 @@ fn accounts() -> Value {
         accrued_tax_quote: 0,
         accrued_protocol_quote: 0,
         launch_ts: 0,
+        launch_slot: 0,
         ..pool.clone()
     };
     let config = ProtocolConfig {
@@ -198,6 +202,7 @@ fn accounts() -> Value {
                 "protocol_tax_share_bps": p.protocol_tax_share_bps,
                 "launch_fee_lamports": p.launch_fee_lamports.to_string(),
                 "launch_ts": p.launch_ts.to_string(),
+                "launch_slot": p.launch_slot.to_string(),
             },
         })
     };
@@ -366,7 +371,7 @@ fn pricing() -> Value {
     for &(reserve_in, reserve_out) in &reserves {
         for &amount in &[1u64, 10_000_000, 1_000_000_000, 1_000_000_000_000_000] {
             for &tax_bps in &[0u16, 9_680, 9_900] {
-                for &protocol_share_bps in &[1_000u16, 2_000] {
+                for &protocol_share_bps in &[1_000u16, 3_000, 10_000] {
                     let pricing = Pricing {
                         reserve_in,
                         reserve_out,
@@ -399,7 +404,31 @@ fn pricing() -> Value {
             }
         }
     }
+    // The protocol's share by slot: the launch block (the launch slot and the next) takes
+    // all of the tax; an unknown launch slot (0) never does.
+    let mut launch_block = Vec::new();
+    for &recorded in &[0u16, 1_000, 3_000] {
+        for &(launch_slot, slot) in &[
+            (0u64, 0u64),
+            (0, 5),
+            (100, 99),
+            (100, 100),
+            (100, 101),
+            (100, 102),
+            (100, u64::MAX),
+            ((1 << 60) + 7, (1 << 60) + 8),
+            (u64::MAX, u64::MAX),
+        ] {
+            launch_block.push(json!({
+                "recorded_share_bps": recorded,
+                "launch_slot": launch_slot.to_string(),
+                "slot": slot.to_string(),
+                "share_bps": protocol_share_at(recorded, launch_slot, slot),
+            }));
+        }
+    }
     json!({
+        "launch_block": launch_block,
         "split_gross": splits,
         "gross_for_effective": grosses,
         "split_tax": shares,
@@ -433,6 +462,7 @@ fn main() {
             "max_duration_secs": MAX_DURATION_SECS,
             "max_protocol_tax_share_bps": MAX_PROTOCOL_TAX_SHARE_BPS,
             "max_launch_fee_lamports": MAX_LAUNCH_FEE_LAMPORTS.to_string(),
+            "launch_block_slots": LAUNCH_BLOCK_SLOTS.to_string(),
             "instruction_discriminators": {
                 "launch": hex(&router::instruction_discriminator("launch")),
                 "claim_tax": hex(&router::instruction_discriminator("claim_tax")),

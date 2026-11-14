@@ -650,7 +650,7 @@ fn the_config_is_capped_and_changes_reach_new_pools_only() {
     assert_fails_with(env.send(&[ix], &[&stranger]), "NotAdmin");
     for args in [
         ConfigUpdate {
-            protocol_tax_share_bps: 2_001,
+            protocol_tax_share_bps: sniper_tax_math::MAX_PROTOCOL_TAX_SHARE_BPS + 1,
             ..env.default_update()
         },
         ConfigUpdate {
@@ -668,7 +668,7 @@ fn the_config_is_capped_and_changes_reach_new_pools_only() {
     let (old, created) = env.create_pool(PoolOptions::default());
     created.expect("create_market");
     let raised = ConfigUpdate {
-        protocol_tax_share_bps: 2_000,
+        protocol_tax_share_bps: sniper_tax_math::MAX_PROTOCOL_TAX_SHARE_BPS,
         launch_fee_lamports: 0,
         ..env.default_update()
     };
@@ -685,5 +685,8 @@ fn the_config_is_capped_and_changes_reach_new_pools_only() {
     );
 
     let new = env.launched_pool(PoolOptions::default());
-    assert_eq!(env.pool_state(&new).protocol_tax_share_bps, 2_000);
+    assert_eq!(
+        env.pool_state(&new).protocol_tax_share_bps,
+        sniper_tax_math::MAX_PROTOCOL_TAX_SHARE_BPS
+    );
 }

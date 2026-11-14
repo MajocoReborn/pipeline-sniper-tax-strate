@@ -2,13 +2,14 @@
   "accounts": {
     "launch_pools": [
       {
-        "data": "1d41bdd84381b33d0101fe01010101010101010101010101010101010101010101010101010101010101010202020202020202020202020202020202020202020202020202020202020202069b8857feab8184fb687f634618c035dac439dc1aeb3b5598a0f00000000001040404040404040404040404040404040404040404040404040404040404040405050505050505050505050505050505050505050505050505050505050505050000000707070707070707070707070707070707070707070707070707070707feffffffffffffff00f2052a01000000c0941b3500000000c09ee60500000000ac262c0158020000e803809698000000000000d2496b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "data": "1d41bdd84381b33d0101fe01010101010101010101010101010101010101010101010101010101010101010202020202020202020202020202020202020202020202020202020202020202069b8857feab8184fb687f634618c035dac439dc1aeb3b5598a0f00000000001040404040404040404040404040404040404040404040404040404040404040405050505050505050505050505050505050505050505050505050505050505050000000707070707070707070707070707070707070707070707070707070707feffffffffffffff00f2052a01000000c0941b3500000000c09ee60500000000ac262c0158020000e803809698000000000000d2496b0000000007000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         "decoded": {
           "accrued_protocol_quote": "99000000",
           "accrued_tax_quote": "891000000",
           "bump": 254,
           "creator": "4vJ9JU1bJJE96FWSJKvHsmmFADCg4gpZQff4P3bkLKi",
           "launch_fee_lamports": "10000000",
+          "launch_slot": "1152921504606846983",
           "launch_ts": "1800000000",
           "market_signer": "111KWCfMfKoLt2cZbE5UcrZknqeER1Q4vVBx4Epu58",
           "protocol_tax_share_bps": 1000,
@@ -33,6 +34,7 @@
           "bump": 254,
           "creator": "4vJ9JU1bJJE96FWSJKvHsmmFADCg4gpZQff4P3bkLKi",
           "launch_fee_lamports": "10000000",
+          "launch_slot": "0",
           "launch_ts": "0",
           "market_signer": "111KWCfMfKoLt2cZbE5UcrZknqeER1Q4vVBx4Epu58",
           "protocol_tax_share_bps": 1000,
@@ -88,10 +90,11 @@
       "pipeline_quote": "868b5b3bb62598da",
       "sweep_protocol_fees": "75e1f04b47c32c2b"
     },
+    "launch_block_slots": "2",
     "max_duration_secs": 1800,
     "max_end_bps": 500,
     "max_launch_fee_lamports": "50000000",
-    "max_protocol_tax_share_bps": 2000,
+    "max_protocol_tax_share_bps": 3000,
     "max_setup_lamports": "100000000",
     "max_start_bps": 9900,
     "min_duration_secs": 60,
@@ -2078,6 +2081,170 @@
         "gross": null
       }
     ],
+    "launch_block": [
+      {
+        "launch_slot": "0",
+        "recorded_share_bps": 0,
+        "share_bps": 0,
+        "slot": "0"
+      },
+      {
+        "launch_slot": "0",
+        "recorded_share_bps": 0,
+        "share_bps": 0,
+        "slot": "5"
+      },
+      {
+        "launch_slot": "100",
+        "recorded_share_bps": 0,
+        "share_bps": 0,
+        "slot": "99"
+      },
+      {
+        "launch_slot": "100",
+        "recorded_share_bps": 0,
+        "share_bps": 10000,
+        "slot": "100"
+      },
+      {
+        "launch_slot": "100",
+        "recorded_share_bps": 0,
+        "share_bps": 10000,
+        "slot": "101"
+      },
+      {
+        "launch_slot": "100",
+        "recorded_share_bps": 0,
+        "share_bps": 0,
+        "slot": "102"
+      },
+      {
+        "launch_slot": "100",
+        "recorded_share_bps": 0,
+        "share_bps": 0,
+        "slot": "18446744073709551615"
+      },
+      {
+        "launch_slot": "1152921504606846983",
+        "recorded_share_bps": 0,
+        "share_bps": 10000,
+        "slot": "1152921504606846984"
+      },
+      {
+        "launch_slot": "18446744073709551615",
+        "recorded_share_bps": 0,
+        "share_bps": 10000,
+        "slot": "18446744073709551615"
+      },
+      {
+        "launch_slot": "0",
+        "recorded_share_bps": 1000,
+        "share_bps": 1000,
+        "slot": "0"
+      },
+      {
+        "launch_slot": "0",
+        "recorded_share_bps": 1000,
+        "share_bps": 1000,
+        "slot": "5"
+      },
+      {
+        "launch_slot": "100",
+        "recorded_share_bps": 1000,
+        "share_bps": 1000,
+        "slot": "99"
+      },
+      {
+        "launch_slot": "100",
+        "recorded_share_bps": 1000,
+        "share_bps": 10000,
+        "slot": "100"
+      },
+      {
+        "launch_slot": "100",
+        "recorded_share_bps": 1000,
+        "share_bps": 10000,
+        "slot": "101"
+      },
+      {
+        "launch_slot": "100",
+        "recorded_share_bps": 1000,
+        "share_bps": 1000,
+        "slot": "102"
+      },
+      {
+        "launch_slot": "100",
+        "recorded_share_bps": 1000,
+        "share_bps": 1000,
+        "slot": "18446744073709551615"
+      },
+      {
+        "launch_slot": "1152921504606846983",
+        "recorded_share_bps": 1000,
+        "share_bps": 10000,
+        "slot": "1152921504606846984"
+      },
+      {
+        "launch_slot": "18446744073709551615",
+        "recorded_share_bps": 1000,
+        "share_bps": 10000,
+        "slot": "18446744073709551615"
+      },
+      {
+        "launch_slot": "0",
+        "recorded_share_bps": 3000,
+        "share_bps": 3000,
+        "slot": "0"
+      },
+      {
+        "launch_slot": "0",
+        "recorded_share_bps": 3000,
+        "share_bps": 3000,
+        "slot": "5"
+      },
+      {
+        "launch_slot": "100",
+        "recorded_share_bps": 3000,
+        "share_bps": 3000,
+        "slot": "99"
+      },
+      {
+        "launch_slot": "100",
+        "recorded_share_bps": 3000,
+        "share_bps": 10000,
+        "slot": "100"
+      },
+      {
+        "launch_slot": "100",
+        "recorded_share_bps": 3000,
+        "share_bps": 10000,
+        "slot": "101"
+      },
+      {
+        "launch_slot": "100",
+        "recorded_share_bps": 3000,
+        "share_bps": 3000,
+        "slot": "102"
+      },
+      {
+        "launch_slot": "100",
+        "recorded_share_bps": 3000,
+        "share_bps": 3000,
+        "slot": "18446744073709551615"
+      },
+      {
+        "launch_slot": "1152921504606846983",
+        "recorded_share_bps": 3000,
+        "share_bps": 10000,
+        "slot": "1152921504606846984"
+      },
+      {
+        "launch_slot": "18446744073709551615",
+        "recorded_share_bps": 3000,
+        "share_bps": 10000,
+        "slot": "18446744073709551615"
+      }
+    ],
     "quotes": [
       {
         "amount": "1",
@@ -2116,7 +2283,7 @@
       {
         "amount": "1",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
@@ -2133,7 +2300,41 @@
       {
         "amount": "1",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "1",
+          "amount_out": "1",
+          "creator_tax": "0",
+          "effective_in": "1",
+          "new_reserve_in": "100000001",
+          "new_reserve_out": "899999999999999",
+          "protocol_fee": "0"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "1",
+          "amount_out": "8999999",
+          "creator_tax": "0",
+          "effective_in": "1",
+          "new_reserve_in": "100000001",
+          "new_reserve_out": "899999991000001",
+          "protocol_fee": "0"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
@@ -2184,7 +2385,7 @@
       {
         "amount": "1",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
@@ -2201,17 +2402,51 @@
       {
         "amount": "1",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
           "amount_in": "32",
           "amount_out": "1",
-          "creator_tax": "25",
+          "creator_tax": "22",
           "effective_in": "1",
           "new_reserve_in": "100000001",
           "new_reserve_out": "899999999999999",
-          "protocol_fee": "6"
+          "protocol_fee": "9"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "1",
+          "amount_out": "0",
+          "creator_tax": "0",
+          "effective_in": "0",
+          "new_reserve_in": "100000000",
+          "new_reserve_out": "900000000000000",
+          "protocol_fee": "1"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "32",
+          "amount_out": "1",
+          "creator_tax": "0",
+          "effective_in": "1",
+          "new_reserve_in": "100000001",
+          "new_reserve_out": "899999999999999",
+          "protocol_fee": "31"
         },
         "tax_bps": 9680
       },
@@ -2252,7 +2487,7 @@
       {
         "amount": "1",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
@@ -2269,17 +2504,51 @@
       {
         "amount": "1",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
           "amount_in": "100",
           "amount_out": "1",
-          "creator_tax": "80",
+          "creator_tax": "70",
           "effective_in": "1",
           "new_reserve_in": "100000001",
           "new_reserve_out": "899999999999999",
-          "protocol_fee": "19"
+          "protocol_fee": "29"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "1",
+          "amount_out": "0",
+          "creator_tax": "0",
+          "effective_in": "0",
+          "new_reserve_in": "100000000",
+          "new_reserve_out": "900000000000000",
+          "protocol_fee": "1"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "100",
+          "amount_out": "1",
+          "creator_tax": "0",
+          "effective_in": "1",
+          "new_reserve_in": "100000001",
+          "new_reserve_out": "899999999999999",
+          "protocol_fee": "99"
         },
         "tax_bps": 9900
       },
@@ -2320,7 +2589,7 @@
       {
         "amount": "10000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
@@ -2337,7 +2606,41 @@
       {
         "amount": "10000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "2",
+          "amount_out": "10000000",
+          "creator_tax": "0",
+          "effective_in": "2",
+          "new_reserve_in": "100000002",
+          "new_reserve_out": "899999990000000",
+          "protocol_fee": "0"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "10000000",
+          "amount_out": "81818181818181",
+          "creator_tax": "0",
+          "effective_in": "10000000",
+          "new_reserve_in": "110000000",
+          "new_reserve_out": "818181818181819",
+          "protocol_fee": "0"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
@@ -2388,34 +2691,68 @@
       {
         "amount": "10000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
           "amount_in": "10000000",
           "amount_out": "2870813397129",
-          "creator_tax": "7744000",
+          "creator_tax": "6776000",
           "effective_in": "320000",
           "new_reserve_in": "100320000",
           "new_reserve_out": "897129186602871",
-          "protocol_fee": "1936000"
+          "protocol_fee": "2904000"
         },
         "tax_bps": 9680
       },
       {
         "amount": "10000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
           "amount_in": "63",
           "amount_out": "10000000",
-          "creator_tax": "49",
+          "creator_tax": "43",
           "effective_in": "2",
           "new_reserve_in": "100000002",
           "new_reserve_out": "899999990000000",
-          "protocol_fee": "12"
+          "protocol_fee": "18"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "10000000",
+          "amount_out": "2870813397129",
+          "creator_tax": "0",
+          "effective_in": "320000",
+          "new_reserve_in": "100320000",
+          "new_reserve_out": "897129186602871",
+          "protocol_fee": "9680000"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "63",
+          "amount_out": "10000000",
+          "creator_tax": "0",
+          "effective_in": "2",
+          "new_reserve_in": "100000002",
+          "new_reserve_out": "899999990000000",
+          "protocol_fee": "61"
         },
         "tax_bps": 9680
       },
@@ -2456,34 +2793,68 @@
       {
         "amount": "10000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
           "amount_in": "10000000",
           "amount_out": "899100899100",
-          "creator_tax": "7920000",
+          "creator_tax": "6930000",
           "effective_in": "100000",
           "new_reserve_in": "100100000",
           "new_reserve_out": "899100899100900",
-          "protocol_fee": "1980000"
+          "protocol_fee": "2970000"
         },
         "tax_bps": 9900
       },
       {
         "amount": "10000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
           "amount_in": "200",
           "amount_out": "10000000",
-          "creator_tax": "159",
+          "creator_tax": "139",
           "effective_in": "2",
           "new_reserve_in": "100000002",
           "new_reserve_out": "899999990000000",
-          "protocol_fee": "39"
+          "protocol_fee": "59"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "10000000",
+          "amount_out": "899100899100",
+          "creator_tax": "0",
+          "effective_in": "100000",
+          "new_reserve_in": "100100000",
+          "new_reserve_out": "899100899100900",
+          "protocol_fee": "9900000"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "200",
+          "amount_out": "10000000",
+          "creator_tax": "0",
+          "effective_in": "2",
+          "new_reserve_in": "100000002",
+          "new_reserve_out": "899999990000000",
+          "protocol_fee": "198"
         },
         "tax_bps": 9900
       },
@@ -2524,7 +2895,7 @@
       {
         "amount": "1000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
@@ -2541,7 +2912,41 @@
       {
         "amount": "1000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "112",
+          "amount_out": "1000000000",
+          "creator_tax": "0",
+          "effective_in": "112",
+          "new_reserve_in": "100000112",
+          "new_reserve_out": "899999000000000",
+          "protocol_fee": "0"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "1000000000",
+          "amount_out": "818181818181818",
+          "creator_tax": "0",
+          "effective_in": "1000000000",
+          "new_reserve_in": "1100000000",
+          "new_reserve_out": "81818181818182",
+          "protocol_fee": "0"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
@@ -2592,34 +2997,68 @@
       {
         "amount": "1000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
           "amount_in": "1000000000",
           "amount_out": "218181818181818",
-          "creator_tax": "774400000",
+          "creator_tax": "677600000",
           "effective_in": "32000000",
           "new_reserve_in": "132000000",
           "new_reserve_out": "681818181818182",
-          "protocol_fee": "193600000"
+          "protocol_fee": "290400000"
         },
         "tax_bps": 9680
       },
       {
         "amount": "1000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
           "amount_in": "3500",
           "amount_out": "1000000000",
-          "creator_tax": "2711",
+          "creator_tax": "2372",
           "effective_in": "112",
           "new_reserve_in": "100000112",
           "new_reserve_out": "899999000000000",
-          "protocol_fee": "677"
+          "protocol_fee": "1016"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "1000000000",
+          "amount_out": "218181818181818",
+          "creator_tax": "0",
+          "effective_in": "32000000",
+          "new_reserve_in": "132000000",
+          "new_reserve_out": "681818181818182",
+          "protocol_fee": "968000000"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "3500",
+          "amount_out": "1000000000",
+          "creator_tax": "0",
+          "effective_in": "112",
+          "new_reserve_in": "100000112",
+          "new_reserve_out": "899999000000000",
+          "protocol_fee": "3388"
         },
         "tax_bps": 9680
       },
@@ -2660,34 +3099,68 @@
       {
         "amount": "1000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
           "amount_in": "1000000000",
           "amount_out": "81818181818181",
-          "creator_tax": "792000000",
+          "creator_tax": "693000000",
           "effective_in": "10000000",
           "new_reserve_in": "110000000",
           "new_reserve_out": "818181818181819",
-          "protocol_fee": "198000000"
+          "protocol_fee": "297000000"
         },
         "tax_bps": 9900
       },
       {
         "amount": "1000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
           "amount_in": "11200",
           "amount_out": "1000000000",
-          "creator_tax": "8871",
+          "creator_tax": "7762",
           "effective_in": "112",
           "new_reserve_in": "100000112",
           "new_reserve_out": "899999000000000",
-          "protocol_fee": "2217"
+          "protocol_fee": "3326"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "1000000000",
+          "amount_out": "81818181818181",
+          "creator_tax": "0",
+          "effective_in": "10000000",
+          "new_reserve_in": "110000000",
+          "new_reserve_out": "818181818181819",
+          "protocol_fee": "990000000"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "11200",
+          "amount_out": "1000000000",
+          "creator_tax": "0",
+          "effective_in": "112",
+          "new_reserve_in": "100000112",
+          "new_reserve_out": "899999000000000",
+          "protocol_fee": "11088"
         },
         "tax_bps": 9900
       },
@@ -2722,7 +3195,7 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
@@ -2739,7 +3212,35 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "1000000000000000",
+          "amount_out": "899999910000008",
+          "creator_tax": "0",
+          "effective_in": "1000000000000000",
+          "new_reserve_in": "1000000100000000",
+          "new_reserve_out": "89999992",
+          "protocol_fee": "0"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
@@ -2778,24 +3279,52 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
           "amount_in": "1000000000000000",
           "amount_out": "899997187508789",
-          "creator_tax": "774400000000000",
+          "creator_tax": "677600000000000",
           "effective_in": "32000000000000",
           "new_reserve_in": "32000100000000",
           "new_reserve_out": "2812491211",
-          "protocol_fee": "193600000000000"
+          "protocol_fee": "290400000000000"
         },
         "tax_bps": 9680
       },
       {
         "amount": "1000000000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "1000000000000000",
+          "amount_out": "899997187508789",
+          "creator_tax": "0",
+          "effective_in": "32000000000000",
+          "new_reserve_in": "32000100000000",
+          "new_reserve_out": "2812491211",
+          "protocol_fee": "968000000000000"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
@@ -2834,24 +3363,52 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
           "amount_in": "1000000000000000",
           "amount_out": "899991000089999",
-          "creator_tax": "792000000000000",
+          "creator_tax": "693000000000000",
           "effective_in": "10000000000000",
           "new_reserve_in": "10000100000000",
           "new_reserve_out": "8999910001",
-          "protocol_fee": "198000000000000"
+          "protocol_fee": "297000000000000"
         },
         "tax_bps": 9900
       },
       {
         "amount": "1000000000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "100000000",
+        "reserve_out": "900000000000000",
+        "result": {
+          "amount_in": "1000000000000000",
+          "amount_out": "899991000089999",
+          "creator_tax": "0",
+          "effective_in": "10000000000000",
+          "new_reserve_in": "10000100000000",
+          "new_reserve_out": "8999910001",
+          "protocol_fee": "990000000000000"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "100000000",
         "reserve_out": "900000000000000",
         "result": {
@@ -2896,7 +3453,7 @@
       {
         "amount": "1",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
@@ -2913,7 +3470,41 @@
       {
         "amount": "1",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "1",
+          "amount_out": "1",
+          "creator_tax": "0",
+          "effective_in": "1",
+          "new_reserve_in": "5000000001",
+          "new_reserve_out": "999999999999",
+          "protocol_fee": "0"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "1",
+          "amount_out": "199",
+          "creator_tax": "0",
+          "effective_in": "1",
+          "new_reserve_in": "5000000001",
+          "new_reserve_out": "999999999801",
+          "protocol_fee": "0"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
@@ -2964,7 +3555,7 @@
       {
         "amount": "1",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
@@ -2981,17 +3572,51 @@
       {
         "amount": "1",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
           "amount_in": "32",
           "amount_out": "1",
-          "creator_tax": "25",
+          "creator_tax": "22",
           "effective_in": "1",
           "new_reserve_in": "5000000001",
           "new_reserve_out": "999999999999",
-          "protocol_fee": "6"
+          "protocol_fee": "9"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "1",
+          "amount_out": "0",
+          "creator_tax": "0",
+          "effective_in": "0",
+          "new_reserve_in": "5000000000",
+          "new_reserve_out": "1000000000000",
+          "protocol_fee": "1"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "32",
+          "amount_out": "1",
+          "creator_tax": "0",
+          "effective_in": "1",
+          "new_reserve_in": "5000000001",
+          "new_reserve_out": "999999999999",
+          "protocol_fee": "31"
         },
         "tax_bps": 9680
       },
@@ -3032,7 +3657,7 @@
       {
         "amount": "1",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
@@ -3049,17 +3674,51 @@
       {
         "amount": "1",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
           "amount_in": "100",
           "amount_out": "1",
-          "creator_tax": "80",
+          "creator_tax": "70",
           "effective_in": "1",
           "new_reserve_in": "5000000001",
           "new_reserve_out": "999999999999",
-          "protocol_fee": "19"
+          "protocol_fee": "29"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "1",
+          "amount_out": "0",
+          "creator_tax": "0",
+          "effective_in": "0",
+          "new_reserve_in": "5000000000",
+          "new_reserve_out": "1000000000000",
+          "protocol_fee": "1"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "100",
+          "amount_out": "1",
+          "creator_tax": "0",
+          "effective_in": "1",
+          "new_reserve_in": "5000000001",
+          "new_reserve_out": "999999999999",
+          "protocol_fee": "99"
         },
         "tax_bps": 9900
       },
@@ -3100,7 +3759,7 @@
       {
         "amount": "10000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
@@ -3117,7 +3776,41 @@
       {
         "amount": "10000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "50001",
+          "amount_out": "10000000",
+          "creator_tax": "0",
+          "effective_in": "50001",
+          "new_reserve_in": "5000050001",
+          "new_reserve_out": "999990000000",
+          "protocol_fee": "0"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "10000000",
+          "amount_out": "1996007984",
+          "creator_tax": "0",
+          "effective_in": "10000000",
+          "new_reserve_in": "5010000000",
+          "new_reserve_out": "998003992016",
+          "protocol_fee": "0"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
@@ -3168,34 +3861,68 @@
       {
         "amount": "10000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
           "amount_in": "10000000",
           "amount_out": "63995904",
-          "creator_tax": "7744000",
+          "creator_tax": "6776000",
           "effective_in": "320000",
           "new_reserve_in": "5000320000",
           "new_reserve_out": "999936004096",
-          "protocol_fee": "1936000"
+          "protocol_fee": "2904000"
         },
         "tax_bps": 9680
       },
       {
         "amount": "10000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
           "amount_in": "1562532",
           "amount_out": "10000000",
-          "creator_tax": "1210025",
+          "creator_tax": "1058772",
           "effective_in": "50001",
           "new_reserve_in": "5000050001",
           "new_reserve_out": "999990000000",
-          "protocol_fee": "302506"
+          "protocol_fee": "453759"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "10000000",
+          "amount_out": "63995904",
+          "creator_tax": "0",
+          "effective_in": "320000",
+          "new_reserve_in": "5000320000",
+          "new_reserve_out": "999936004096",
+          "protocol_fee": "9680000"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "1562532",
+          "amount_out": "10000000",
+          "creator_tax": "0",
+          "effective_in": "50001",
+          "new_reserve_in": "5000050001",
+          "new_reserve_out": "999990000000",
+          "protocol_fee": "1512531"
         },
         "tax_bps": 9680
       },
@@ -3236,34 +3963,68 @@
       {
         "amount": "10000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
           "amount_in": "10000000",
           "amount_out": "19999600",
-          "creator_tax": "7920000",
+          "creator_tax": "6930000",
           "effective_in": "100000",
           "new_reserve_in": "5000100000",
           "new_reserve_out": "999980000400",
-          "protocol_fee": "1980000"
+          "protocol_fee": "2970000"
         },
         "tax_bps": 9900
       },
       {
         "amount": "10000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
           "amount_in": "5000100",
           "amount_out": "10000000",
-          "creator_tax": "3960080",
+          "creator_tax": "3465070",
           "effective_in": "50001",
           "new_reserve_in": "5000050001",
           "new_reserve_out": "999990000000",
-          "protocol_fee": "990019"
+          "protocol_fee": "1485029"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "10000000",
+          "amount_out": "19999600",
+          "creator_tax": "0",
+          "effective_in": "100000",
+          "new_reserve_in": "5000100000",
+          "new_reserve_out": "999980000400",
+          "protocol_fee": "9900000"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "5000100",
+          "amount_out": "10000000",
+          "creator_tax": "0",
+          "effective_in": "50001",
+          "new_reserve_in": "5000050001",
+          "new_reserve_out": "999990000000",
+          "protocol_fee": "4950099"
         },
         "tax_bps": 9900
       },
@@ -3304,7 +4065,7 @@
       {
         "amount": "1000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
@@ -3321,7 +4082,41 @@
       {
         "amount": "1000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "5005006",
+          "amount_out": "1000000000",
+          "creator_tax": "0",
+          "effective_in": "5005006",
+          "new_reserve_in": "5005005006",
+          "new_reserve_out": "999000000000",
+          "protocol_fee": "0"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "1000000000",
+          "amount_out": "166666666666",
+          "creator_tax": "0",
+          "effective_in": "1000000000",
+          "new_reserve_in": "6000000000",
+          "new_reserve_out": "833333333334",
+          "protocol_fee": "0"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
@@ -3372,34 +4167,68 @@
       {
         "amount": "1000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
           "amount_in": "1000000000",
           "amount_out": "6359300476",
-          "creator_tax": "774400000",
+          "creator_tax": "677600000",
           "effective_in": "32000000",
           "new_reserve_in": "5032000000",
           "new_reserve_out": "993640699524",
-          "protocol_fee": "193600000"
+          "protocol_fee": "290400000"
         },
         "tax_bps": 9680
       },
       {
         "amount": "1000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
           "amount_in": "156406438",
           "amount_out": "1000000000",
-          "creator_tax": "121121146",
+          "creator_tax": "105981003",
           "effective_in": "5005006",
           "new_reserve_in": "5005005006",
           "new_reserve_out": "999000000000",
-          "protocol_fee": "30280286"
+          "protocol_fee": "45420429"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "1000000000",
+          "amount_out": "6359300476",
+          "creator_tax": "0",
+          "effective_in": "32000000",
+          "new_reserve_in": "5032000000",
+          "new_reserve_out": "993640699524",
+          "protocol_fee": "968000000"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "156406438",
+          "amount_out": "1000000000",
+          "creator_tax": "0",
+          "effective_in": "5005006",
+          "new_reserve_in": "5005005006",
+          "new_reserve_out": "999000000000",
+          "protocol_fee": "151401432"
         },
         "tax_bps": 9680
       },
@@ -3440,34 +4269,68 @@
       {
         "amount": "1000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
           "amount_in": "1000000000",
           "amount_out": "1996007984",
-          "creator_tax": "792000000",
+          "creator_tax": "693000000",
           "effective_in": "10000000",
           "new_reserve_in": "5010000000",
           "new_reserve_out": "998003992016",
-          "protocol_fee": "198000000"
+          "protocol_fee": "297000000"
         },
         "tax_bps": 9900
       },
       {
         "amount": "1000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
           "amount_in": "500500600",
           "amount_out": "1000000000",
-          "creator_tax": "396396476",
+          "creator_tax": "346846916",
           "effective_in": "5005006",
           "new_reserve_in": "5005005006",
           "new_reserve_out": "999000000000",
-          "protocol_fee": "99099118"
+          "protocol_fee": "148648678"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "1000000000",
+          "amount_out": "1996007984",
+          "creator_tax": "0",
+          "effective_in": "10000000",
+          "new_reserve_in": "5010000000",
+          "new_reserve_out": "998003992016",
+          "protocol_fee": "990000000"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "500500600",
+          "amount_out": "1000000000",
+          "creator_tax": "0",
+          "effective_in": "5005006",
+          "new_reserve_in": "5005005006",
+          "new_reserve_out": "999000000000",
+          "protocol_fee": "495495594"
         },
         "tax_bps": 9900
       },
@@ -3502,7 +4365,7 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
@@ -3519,7 +4382,35 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "1000000000000000",
+          "amount_out": "999995000024",
+          "creator_tax": "0",
+          "effective_in": "1000000000000000",
+          "new_reserve_in": "1000005000000000",
+          "new_reserve_out": "4999976",
+          "protocol_fee": "0"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
@@ -3558,24 +4449,52 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
           "amount_in": "1000000000000000",
           "amount_out": "999843774410",
-          "creator_tax": "774400000000000",
+          "creator_tax": "677600000000000",
           "effective_in": "32000000000000",
           "new_reserve_in": "32005000000000",
           "new_reserve_out": "156225590",
-          "protocol_fee": "193600000000000"
+          "protocol_fee": "290400000000000"
         },
         "tax_bps": 9680
       },
       {
         "amount": "1000000000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "1000000000000000",
+          "amount_out": "999843774410",
+          "creator_tax": "0",
+          "effective_in": "32000000000000",
+          "new_reserve_in": "32005000000000",
+          "new_reserve_out": "156225590",
+          "protocol_fee": "968000000000000"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
@@ -3614,24 +4533,52 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
           "amount_in": "1000000000000000",
           "amount_out": "999500249875",
-          "creator_tax": "792000000000000",
+          "creator_tax": "693000000000000",
           "effective_in": "10000000000000",
           "new_reserve_in": "10005000000000",
           "new_reserve_out": "499750125",
-          "protocol_fee": "198000000000000"
+          "protocol_fee": "297000000000000"
         },
         "tax_bps": 9900
       },
       {
         "amount": "1000000000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "5000000000",
+        "reserve_out": "1000000000000",
+        "result": {
+          "amount_in": "1000000000000000",
+          "amount_out": "999500249875",
+          "creator_tax": "0",
+          "effective_in": "10000000000000",
+          "new_reserve_in": "10005000000000",
+          "new_reserve_out": "499750125",
+          "protocol_fee": "990000000000000"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "5000000000",
         "reserve_out": "1000000000000",
         "result": {
@@ -3670,7 +4617,7 @@
       {
         "amount": "1",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
@@ -3687,7 +4634,35 @@
       {
         "amount": "1",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "amount_in": "1",
+          "amount_out": "0",
+          "creator_tax": "0",
+          "effective_in": "1",
+          "new_reserve_in": "2",
+          "new_reserve_out": "1",
+          "protocol_fee": "0"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
@@ -3726,7 +4701,7 @@
       {
         "amount": "1",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
@@ -3743,7 +4718,35 @@
       {
         "amount": "1",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "amount_in": "1",
+          "amount_out": "0",
+          "creator_tax": "0",
+          "effective_in": "0",
+          "new_reserve_in": "1",
+          "new_reserve_out": "1",
+          "protocol_fee": "1"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
@@ -3782,7 +4785,7 @@
       {
         "amount": "1",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
@@ -3799,7 +4802,35 @@
       {
         "amount": "1",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "amount_in": "1",
+          "amount_out": "0",
+          "creator_tax": "0",
+          "effective_in": "0",
+          "new_reserve_in": "1",
+          "new_reserve_out": "1",
+          "protocol_fee": "1"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
@@ -3838,7 +4869,7 @@
       {
         "amount": "10000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
@@ -3855,7 +4886,35 @@
       {
         "amount": "10000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "amount_in": "10000000",
+          "amount_out": "0",
+          "creator_tax": "0",
+          "effective_in": "10000000",
+          "new_reserve_in": "10000001",
+          "new_reserve_out": "1",
+          "protocol_fee": "0"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
@@ -3894,24 +4953,52 @@
       {
         "amount": "10000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
           "amount_in": "10000000",
           "amount_out": "0",
-          "creator_tax": "7744000",
+          "creator_tax": "6776000",
           "effective_in": "320000",
           "new_reserve_in": "320001",
           "new_reserve_out": "1",
-          "protocol_fee": "1936000"
+          "protocol_fee": "2904000"
         },
         "tax_bps": 9680
       },
       {
         "amount": "10000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "amount_in": "10000000",
+          "amount_out": "0",
+          "creator_tax": "0",
+          "effective_in": "320000",
+          "new_reserve_in": "320001",
+          "new_reserve_out": "1",
+          "protocol_fee": "9680000"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
@@ -3950,24 +5037,52 @@
       {
         "amount": "10000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
           "amount_in": "10000000",
           "amount_out": "0",
-          "creator_tax": "7920000",
+          "creator_tax": "6930000",
           "effective_in": "100000",
           "new_reserve_in": "100001",
           "new_reserve_out": "1",
-          "protocol_fee": "1980000"
+          "protocol_fee": "2970000"
         },
         "tax_bps": 9900
       },
       {
         "amount": "10000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "amount_in": "10000000",
+          "amount_out": "0",
+          "creator_tax": "0",
+          "effective_in": "100000",
+          "new_reserve_in": "100001",
+          "new_reserve_out": "1",
+          "protocol_fee": "9900000"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
@@ -4006,7 +5121,7 @@
       {
         "amount": "1000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
@@ -4023,7 +5138,35 @@
       {
         "amount": "1000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "amount_in": "1000000000",
+          "amount_out": "0",
+          "creator_tax": "0",
+          "effective_in": "1000000000",
+          "new_reserve_in": "1000000001",
+          "new_reserve_out": "1",
+          "protocol_fee": "0"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
@@ -4062,24 +5205,52 @@
       {
         "amount": "1000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
           "amount_in": "1000000000",
           "amount_out": "0",
-          "creator_tax": "774400000",
+          "creator_tax": "677600000",
           "effective_in": "32000000",
           "new_reserve_in": "32000001",
           "new_reserve_out": "1",
-          "protocol_fee": "193600000"
+          "protocol_fee": "290400000"
         },
         "tax_bps": 9680
       },
       {
         "amount": "1000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "amount_in": "1000000000",
+          "amount_out": "0",
+          "creator_tax": "0",
+          "effective_in": "32000000",
+          "new_reserve_in": "32000001",
+          "new_reserve_out": "1",
+          "protocol_fee": "968000000"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
@@ -4118,24 +5289,52 @@
       {
         "amount": "1000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
           "amount_in": "1000000000",
           "amount_out": "0",
-          "creator_tax": "792000000",
+          "creator_tax": "693000000",
           "effective_in": "10000000",
           "new_reserve_in": "10000001",
           "new_reserve_out": "1",
-          "protocol_fee": "198000000"
+          "protocol_fee": "297000000"
         },
         "tax_bps": 9900
       },
       {
         "amount": "1000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "amount_in": "1000000000",
+          "amount_out": "0",
+          "creator_tax": "0",
+          "effective_in": "10000000",
+          "new_reserve_in": "10000001",
+          "new_reserve_out": "1",
+          "protocol_fee": "990000000"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
@@ -4174,7 +5373,7 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
@@ -4191,7 +5390,35 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "amount_in": "1000000000000000",
+          "amount_out": "0",
+          "creator_tax": "0",
+          "effective_in": "1000000000000000",
+          "new_reserve_in": "1000000000000001",
+          "new_reserve_out": "1",
+          "protocol_fee": "0"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
@@ -4230,24 +5457,52 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
           "amount_in": "1000000000000000",
           "amount_out": "0",
-          "creator_tax": "774400000000000",
+          "creator_tax": "677600000000000",
           "effective_in": "32000000000000",
           "new_reserve_in": "32000000000001",
           "new_reserve_out": "1",
-          "protocol_fee": "193600000000000"
+          "protocol_fee": "290400000000000"
         },
         "tax_bps": 9680
       },
       {
         "amount": "1000000000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "amount_in": "1000000000000000",
+          "amount_out": "0",
+          "creator_tax": "0",
+          "effective_in": "32000000000000",
+          "new_reserve_in": "32000000000001",
+          "new_reserve_out": "1",
+          "protocol_fee": "968000000000000"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
@@ -4286,24 +5541,52 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
           "amount_in": "1000000000000000",
           "amount_out": "0",
-          "creator_tax": "792000000000000",
+          "creator_tax": "693000000000000",
           "effective_in": "10000000000000",
           "new_reserve_in": "10000000000001",
           "new_reserve_out": "1",
-          "protocol_fee": "198000000000000"
+          "protocol_fee": "297000000000000"
         },
         "tax_bps": 9900
       },
       {
         "amount": "1000000000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "1",
+        "reserve_out": "1",
+        "result": {
+          "amount_in": "1000000000000000",
+          "amount_out": "0",
+          "creator_tax": "0",
+          "effective_in": "10000000000000",
+          "new_reserve_in": "10000000000001",
+          "new_reserve_out": "1",
+          "protocol_fee": "990000000000000"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "1",
         "reserve_out": "1",
         "result": {
@@ -4342,7 +5625,7 @@
       {
         "amount": "1",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4359,7 +5642,35 @@
       {
         "amount": "1",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "Overflow"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "amount_in": "1",
+          "amount_out": "0",
+          "creator_tax": "0",
+          "effective_in": "1",
+          "new_reserve_in": "18446744073709551615",
+          "new_reserve_out": "5000000000",
+          "protocol_fee": "0"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4398,7 +5709,7 @@
       {
         "amount": "1",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4415,7 +5726,35 @@
       {
         "amount": "1",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "Overflow"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "amount_in": "1",
+          "amount_out": "0",
+          "creator_tax": "0",
+          "effective_in": "0",
+          "new_reserve_in": "18446744073709551614",
+          "new_reserve_out": "5000000000",
+          "protocol_fee": "1"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4454,7 +5793,7 @@
       {
         "amount": "1",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4471,7 +5810,35 @@
       {
         "amount": "1",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "Overflow"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "amount_in": "1",
+          "amount_out": "0",
+          "creator_tax": "0",
+          "effective_in": "0",
+          "new_reserve_in": "18446744073709551614",
+          "new_reserve_out": "5000000000",
+          "protocol_fee": "1"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4504,7 +5871,7 @@
       {
         "amount": "10000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4515,7 +5882,29 @@
       {
         "amount": "10000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "Overflow"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "Overflow"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4548,7 +5937,7 @@
       {
         "amount": "10000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4559,7 +5948,29 @@
       {
         "amount": "10000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "Overflow"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "Overflow"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4592,7 +6003,7 @@
       {
         "amount": "10000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4603,7 +6014,29 @@
       {
         "amount": "10000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "Overflow"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "Overflow"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4636,7 +6069,7 @@
       {
         "amount": "1000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4647,7 +6080,29 @@
       {
         "amount": "1000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "Overflow"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "Overflow"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4680,7 +6135,7 @@
       {
         "amount": "1000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4691,7 +6146,29 @@
       {
         "amount": "1000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "Overflow"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "Overflow"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4724,7 +6201,7 @@
       {
         "amount": "1000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4735,7 +6212,29 @@
       {
         "amount": "1000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "Overflow"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "Overflow"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4768,7 +6267,7 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4779,7 +6278,29 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "Overflow"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4812,7 +6333,7 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4823,7 +6344,29 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "Overflow"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4856,7 +6399,7 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4867,7 +6410,29 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "18446744073709551614",
+        "reserve_out": "5000000000",
+        "result": {
+          "error": "Overflow"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "18446744073709551614",
         "reserve_out": "5000000000",
         "result": {
@@ -4900,7 +6465,7 @@
       {
         "amount": "1",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -4911,7 +6476,29 @@
       {
         "amount": "1",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -4944,7 +6531,7 @@
       {
         "amount": "1",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -4955,7 +6542,29 @@
       {
         "amount": "1",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -4988,7 +6597,7 @@
       {
         "amount": "1",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -4999,7 +6608,29 @@
       {
         "amount": "1",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -5032,7 +6663,7 @@
       {
         "amount": "10000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -5043,7 +6674,29 @@
       {
         "amount": "10000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -5076,7 +6729,7 @@
       {
         "amount": "10000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -5087,7 +6740,29 @@
       {
         "amount": "10000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -5120,7 +6795,7 @@
       {
         "amount": "10000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -5131,7 +6806,29 @@
       {
         "amount": "10000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "10000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -5164,7 +6861,7 @@
       {
         "amount": "1000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -5175,7 +6872,29 @@
       {
         "amount": "1000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -5208,7 +6927,7 @@
       {
         "amount": "1000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -5219,7 +6938,29 @@
       {
         "amount": "1000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -5252,7 +6993,7 @@
       {
         "amount": "1000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -5263,7 +7004,29 @@
       {
         "amount": "1000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -5296,7 +7059,7 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -5307,7 +7070,29 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 0
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -5340,7 +7125,7 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -5351,7 +7136,29 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9680
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -5384,7 +7191,7 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_in",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {
@@ -5395,7 +7202,29 @@
       {
         "amount": "1000000000000000",
         "mode": "exact_out",
-        "protocol_share_bps": 2000,
+        "protocol_share_bps": 3000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_in",
+        "protocol_share_bps": 10000,
+        "reserve_in": "0",
+        "reserve_out": "1000000",
+        "result": {
+          "error": "InsufficientLiquidity"
+        },
+        "tax_bps": 9900
+      },
+      {
+        "amount": "1000000000000000",
+        "mode": "exact_out",
+        "protocol_share_bps": 10000,
         "reserve_in": "0",
         "reserve_out": "1000000",
         "result": {

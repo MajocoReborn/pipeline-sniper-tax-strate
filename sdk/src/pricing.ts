@@ -4,6 +4,7 @@
 
 import type { Side } from './pda.js';
 import type { LaunchPool } from './codecs.js';
+import { LAUNCH_BLOCK_SLOTS } from './constants.js';
 import { applicableTaxBps, poolSchedule } from './tax.js';
 
 const BPS = 10_000n;
@@ -122,13 +123,30 @@ export function quoteExactOut(pricing: Pricing, amountOut: bigint): QuoteResult 
     return settle(pricing, amountIn, splitGross(amountIn, pricing.taxBps), amountOut);
 }
 
-/** What a trade on `pool` sees at `now`: reserves in trade direction and the rate it pays. */
-export function poolPricing(pool: LaunchPool, side: Side, trader: string | null, now: bigint): Pricing {
+/**
+ * The protocol's share of a tax paid in `slot`: all of it in the launch block (the launch
+ * slot and the next), the pool's recorded share otherwise. A `launchSlot` of 0 (pools
+ * launched before the launch block existed) always gives the recorded share.
+ */
+export function protocolShareAt(recordedShareBps: number, launchSlot: bigint, slot: bigint): number {
+    const inLaunchBlock = launchSlot !== 0n && slot >= launchSlot && slot - launchSlot < LAUNCH_BLOCK_SLOTS;
+    return inLaunchBlock ? Number(BPS) : recordedShareBps;
+}
+
+/**
+ * What a trade on `pool` sees at `now`: reserves in trade direction and the rate it pays.
+ * `slot` decides how the tax is split (`protocolShareAt`); without it, the pool's recorded
+ * share is used. What the trader pays and receives doesn't depend on it.
+ */
+export function poolPricing(pool: LaunchPool, side: Side, trader: string | null, now: bigint, slot?: bigint): Pricing {
     const buy = side === 'buy';
     return {
         reserveIn: buy ? pool.reserveQuote : pool.reserveToken,
         reserveOut: buy ? pool.reserveToken : pool.reserveQuote,
         taxBps: applicableTaxBps(poolSchedule(pool), pool.launchTs, now, side, trader === pool.creator),
-        protocolShareBps: pool.protocolTaxShareBps,
+        protocolShareBps:
+            slot === undefined
+                ? pool.protocolTaxShareBps
+                : protocolShareAt(pool.protocolTaxShareBps, pool.launchSlot, slot),
     };
 }

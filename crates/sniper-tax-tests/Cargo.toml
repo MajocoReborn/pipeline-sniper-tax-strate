@@ -11,7 +11,7 @@ bincode = "1"
 borsh = { version = "1.5", features = ["derive"] }
 litesvm = "=0.18.2"
 sniper-tax-client = { path = "../sniper-tax-client" }
-sniper-tax-math = { path = "../sniper-tax-math" }
+sniper-tax-math = { path = "../../programs/sniper-tax-math" }
 solana-account = "=4.7.0"
 solana-clock = "~3.2.0"
 solana-instruction = "=3.5.1"

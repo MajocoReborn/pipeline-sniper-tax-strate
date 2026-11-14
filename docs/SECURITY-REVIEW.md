@@ -9,7 +9,7 @@
 |---|---|
 | Program | `programs/sniper-tax`. Reviewed: sha256 `222ee7691fe1b9ca344f0831b5b9ead3b863a59ba38c26c5384a105a92f09c3a`, the version on devnet (`EZwLuZ8mSiBoeKtbHwQK4kxCqqj4JuureT1kHpTK3i6b`) |
 | Fixes | Version with sha256 `9f24dafa0168585de8e15a519a178ed14e6e2bb7d3f8443862eff1db6379f7cd` (10 November 2026). Fixes H1, H2, L1, L2, I1 and I2. Live on devnet since 10 November 2026 (slot 520838510), checked on-chain |
-| Also covered | `crates/sniper-tax-math` (the program's pricing) and the interaction with the Pipeline router (pinned devnet binary) |
+| Also covered | `crates/sniper-tax-math` (the program's pricing; `programs/sniper-tax-math` since 14 November) and the interaction with the Pipeline router (pinned devnet binary) |
 | Method | Every instruction and constraint walked through from an attacker's point of view. Each suspicion was, where possible, confirmed or refuted with a test against the real router. In addition: property tests, the stress test (60,000 steps) and the mutation test |
 
 ## Summary
@@ -186,6 +186,21 @@ The creator exemption relies on the router passing on the signing trader. The ro
 | Hook accounts that don't get through | A custom `transfer_checked` helper | `transfer_hook.rs`, on the quote mint (catches the mutant) |
 | Reentrancy through a hook | Solana does not let a program that is already on the stack be called again | — |
 | Overflow | u128 intermediates, `checked_*`, `overflow-checks = true` | `a_supply_near_the_u64_limit_trades_without_overflow`, `quotes_never_panic` |
+
+## Changes after the review
+
+**14 November 2026: the revenue model B14** (sha256 `db635b29f127a8b249e3b4a83693482abec03cf171a4b3783da0c3cec818e24f`). The cap on the protocol's share of the tax rises from 20% to 30%, and the tax on buys in the launch block (the launch slot and the next) goes to the protocol in full. Reviewed as follows:
+
+| Question | Answer | Evidence |
+|---|---|---|
+| Does a trader pay or receive anything different? | No. The rate and the amounts are computed before the split; only `creator_tax` and `protocol_fee` change | `a_launch_block_buy_gets_the_same_tokens_as_any_buy_at_that_rate`, `quotes_in_the_launch_block_match_the_swap` |
+| Do quote and swap agree? | Yes: both read the same `Clock` (time and slot) through `LaunchPool::quote` | `quotes_in_the_launch_block_match_the_swap` |
+| Do the books still add up? | `split_tax` with a share of 10000 gives the protocol exactly the tax, the creator 0 | Property tests `the_launch_block_tax_goes_to_the_protocol_in_full`, `tax_shares_add_up`; `assert_solvent` in the integration tests |
+| Existing pools? | Their reserved bytes are zero, so `launch_slot = 0`, which never triggers the rule; their recorded share is unchanged | `a_pool_launched_before_the_launch_block_keeps_its_split`; the devnet tool decodes every devnet pool with the new layout |
+| Can the admin or anyone move the launch block? | No. `launch_slot` is written once, by `launch`, from the `Clock` sysvar | `the_launch_records_its_slot` |
+| Overflow at the end of the slot range? | `slot - launch_slot` is computed only when `slot >= launch_slot` | Unit test with `u64::MAX` |
+| Incentives | The creator gets nothing from launch-block snipes, so a creator gains nothing by tipping off or bundling snipers. The protocol gains from them, but can't change when a pool launches or which slot a trade lands in. The creator's own buys stay tax-free, in every slot | — |
+| Transparency (M2) | The rule and the 70/30 split are in the metadata, the README and `INTEGRATION.md`; each pool shows its `launch_slot` and recorded share | — |
 
 ## Recommended order
 

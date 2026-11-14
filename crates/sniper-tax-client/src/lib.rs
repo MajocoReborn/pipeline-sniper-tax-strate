@@ -81,7 +81,10 @@ pub struct LaunchPool {
     pub protocol_tax_share_bps: u16,
     pub launch_fee_lamports: u64,
     pub launch_ts: i64,
-    pub reserved: [u8; 64],
+    /// The slot the pool launched in; 0 while pending and for pools launched before the
+    /// launch block existed.
+    pub launch_slot: u64,
+    pub reserved: [u8; 56],
 }
 
 impl LaunchPool {

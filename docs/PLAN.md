@@ -83,13 +83,14 @@ Example: a sniper buys for 10 SOL at t = 0. 9.9 SOL goes to the creator tax, 0.1
 - The custom action `claim_tax` (signed by the creator) moves `accrued_tax_quote` to a quote token account of their choice.
 - There is **no liquidity withdrawal**: the launch liquidity is locked for good (the equivalent of "LP burned"). The creator therefore cannot drain the pool (rug).
 
-### 3.5 Revenue model for the dev (B9: a share of the tax plus a small launch fee)
+### 3.5 Revenue model for the dev (B9 and B14: a share of the tax, the launch block, a small launch fee)
 
 Solana users watch costs closely, so the fees stay low and visible:
 
 | Source | Default | Hard cap in code | Who pays |
 |---|---|---|---|
-| **A. Share of the sniper tax** | 10% of every withheld tax | 20% | Out of the creator's part of the tax. The sniper pays nothing extra, and neither do ordinary buyers after the window |
+| **A. Share of the sniper tax** | 30% of every withheld tax (10% until 14 November) | 30% (20% until 14 November) | Out of the creator's part of the tax. The sniper pays nothing extra, and neither do ordinary buyers after the window |
+| **A2. The launch block** | All of the tax on buys in the launch slot and the next | Those two slots | Out of the creator's part: in those slots the creator gets none. Bundled and same-block snipes land there |
 | **B. Launch fee** | 0.01 SOL per `launch` | 0.05 SOL | The creator, once. For comparison: the rent for the pool and vaults together is about 0.007 SOL |
 
 How it works:
@@ -98,10 +99,11 @@ How it works:
 - **Recorded per pool:** `pipeline_init_market` copies the tax share and the launch fee into the pool. A later config change affects new pools only.
 - The launch fee is `min(pool.launch_fee_lamports, config.launch_fee_lamports)`. The creator therefore never pays more than applied at creation, and benefits from a later reduction (for example a 0 SOL promotion).
 - The tax share: `protocol = floor(tax · share / 10000)` and `creator = tax − protocol`. Rounding favours the creator. Both amounts stay in the quote vault (Strategy Guide rule 10), as `accrued_protocol_quote` and `accrued_tax_quote`.
+- The launch block (B14): `launch` records `launch_slot` (in the pool's reserved bytes). A buy whose slot is `launch_slot` or `launch_slot + 1` uses a share of 10000, so the protocol takes the whole tax (`math::protocol_share_at`). Pools launched before this rule have `launch_slot = 0`, which never triggers it.
 - `sweep_protocol_fees` is permissionless and sends `accrued_protocol_quote` only to the ATA of `config.treasury`, just like Pipeline's own `sweep_fees`.
 - `pipeline_quote` uses the total tax. The share changes nothing about what the buyer receives, so quotes stay correct.
 
-Example: a sniper buys for 10 SOL at t = 0. The tax is 9.9 SOL, of which 0.99 SOL goes to the dev treasury and 8.91 SOL to the creator. The sniper also pays 0.025 SOL to Pipeline.
+Example: a sniper buys for 10 SOL at t = 0, two slots or more after the launch. The tax is 9.9 SOL, of which 2.97 SOL goes to the dev treasury and 6.93 SOL to the creator. In the launch slot or the next, all 9.9 SOL goes to the dev treasury. The sniper also pays 0.025 SOL to Pipeline.
 
 ## 4. State
 
@@ -136,7 +138,7 @@ pub struct LaunchPool {
 pub struct ProtocolConfig {          // PDA ["config"]
     pub admin: Pubkey,               // may change settings within the caps (multisig recommended)
     pub treasury: Pubkey,            // receives launch fees and the tax share
-    pub protocol_tax_share_bps: u16, // default 1000 (10%)
+    pub protocol_tax_share_bps: u16, // default 3000 (30%)
     pub launch_fee_lamports: u64,    // default 10_000_000 (0.01 SOL)
     pub bump: u8,
     pub pending_admin: Pubkey,       // proposed admin (propose_admin); default = none
@@ -300,10 +302,10 @@ Pipeline-Sniper-Tax/
 ├── rust-toolchain.toml             # 1.97.1 (same as Pipeline)
 ├── programs/
 │   ├── Cargo.toml                  # SBF workspace, overflow-checks = true, lto = "fat"
-│   └── sniper-tax/                 # Anchor program (Apache-2.0)
-│       └── src/{lib.rs, state.rs, instructions/*.rs, policy.rs, errors.rs}
+│   ├── sniper-tax/                 # Anchor program (Apache-2.0)
+│   │   └── src/{lib.rs, state.rs, instructions/*.rs, policy.rs, errors.rs}
+│   └── sniper-tax-math/            # pure maths (no_std-friendly), testable on the host
 ├── crates/
-│   ├── sniper-tax-math/            # pure maths (no_std-friendly), testable on the host
 │   └── sniper-tax-tests/           # LiteSVM integration tests against the real router
 ├── metadata/sniper-tax.json        # pipeline-strategy-metadata/1
 ├── scripts/devnet/                 # TS smoke test with @solana/kit and the Pipeline SDK
@@ -420,10 +422,11 @@ Pipeline-Sniper-Tax/
 - **Docs in English (10 November):** README, PLAN, HANDOFF and SECURITY-REVIEW translated from Dutch.
 - **Launch site (10 November):** the plan in [`LAUNCH-SITE.md`](https://github.com/MajocoReborn/Pipeline-Sniper-Tax/blob/main/docs/LAUNCH-SITE.md) is approved; milestone 1, the TypeScript client in `app/`, is done.
 - **Own repository (13 November):** the protocol moved from `MajocoReborn/Pipeline-Sniper-Tax` (which keeps the launch site) to `MajocoReborn/pipeline-sniper-tax-strategy`, with the program unchanged (sha256 `9f24dafa…`). The TypeScript client became the npm package in `sdk/`, and [`INTEGRATION.md`](INTEGRATION.md) is the guide for launchpads.
+- **Revenue model B14 (14 November):** the cap on the protocol's share is 30% and the launch block's tax goes to the protocol (`launch_slot` in the pool, `math::protocol_share_at`), with unit, property and integration tests (`launch_block.rs`). `sniper-tax-math` moved into the `programs/` workspace, so the build no longer depends on the repository's path. The new binary has sha256 `db635b29f127a8b249e3b4a83693482abec03cf171a4b3783da0c3cec818e24f`; the owner upgraded devnet to it (slot 522277672) and set the share to 30%.
 
 ## 11. Decisions
 
-All decisions have been made. B1–B8 were approved as recommended; B9 was chosen as A plus a small B. B10–B13 follow from the review (10 November):
+All decisions have been made. B1–B8 were approved as recommended; B9 was chosen as A plus a small B. B10–B13 follow from the review (10 November); B14 revises B9 (14 November):
 
 | # | Question | Decision |
 |---|---|---|
@@ -435,8 +438,9 @@ All decisions have been made. B1–B8 were approved as recommended; B9 was chose
 | B6 | Support exact-out? | Yes |
 | B7 | Market type | Constant-product with real liquidity (v1); a bonding curve with a virtual reserve possibly in v2 |
 | B8 | Permanent fee after the window (`end_bps`) | 0% by default, at most 5% |
-| B9 | Revenue model for the program's dev | 10% of the sniper tax (cap 20%) plus 0.01 SOL per launch (cap 0.05 SOL), recorded per pool. See §3.5 |
+| B9 | Revenue model for the program's dev | 10% of the sniper tax (cap 20%) plus 0.01 SOL per launch (cap 0.05 SOL), recorded per pool. See §3.5. Changed by B14 |
 | B10 | Transfer fee (review H1) | Only without a fee authority, with the fee in force and a scheduled fee at most 5%. For both mints |
 | B11 | Transfer hook (review H2) | Refused on the launch token, allowed on the quote mint |
 | B12 | Small points (review I1, I2, L1, L2) | In the same version |
 | B13 | Deploy of the new version | The owner upgrades locally with their own wallet |
+| B14 | Revenue model, revised (14 November) | 70% of the tax to the creator and 30% to the dev (cap 30%, recorded per pool), and all of the tax on buys in the launch block (the launch slot and the next) to the dev. Taxable stays the same: buys by anyone but the creator; sells never |

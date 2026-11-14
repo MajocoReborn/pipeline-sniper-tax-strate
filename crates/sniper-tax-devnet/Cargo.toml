@@ -12,6 +12,7 @@ bincode = "1"
 borsh = { version = "1.5", features = ["derive"] }
 serde_json = "1"
 sniper-tax-client = { path = "../sniper-tax-client" }
+sniper-tax-math = { path = "../../programs/sniper-tax-math" }
 solana-hash = "4.6"
 solana-keypair = "=3.1.2"
 solana-signer = "=3.0.1"
