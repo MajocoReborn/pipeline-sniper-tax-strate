@@ -5,7 +5,7 @@ For a new session. The design and background are in [`PLAN.md`](PLAN.md), the re
 [`INTEGRATION.md`](INTEGRATION.md); this document says where everything is, how to test it
 and what to watch out for.
 
-**Latest step (14 November): the revenue model B14, in the program, not yet on devnet.**
+**Latest step (14 November): the revenue model B14, live on devnet.**
 The owner chose 70% of the tax for the creator and 30% for the dev, and all of the tax on
 buys in the launch block (the launch slot and the next, where bundled snipes land) for the
 dev. What is taxable is unchanged: buys by anyone but the creator; sells never.
@@ -18,8 +18,10 @@ dev. What is taxable is unchanged: buys by anyone but the creator; sells never.
 - `sniper-tax-math` moved into the `programs/` workspace, which makes the build independent
   of the repository's path (pitfall 1).
 - New binary: sha256 `db635b29f127a8b249e3b4a83693482abec03cf171a4b3783da0c3cec818e24f`,
-  375,712 bytes. Devnet still runs `9f24dafa…` until the owner upgrades ("Devnet"), then sets
-  the share to 30% with `config`.
+  375,712 bytes. The owner upgraded devnet to it (slot 522277672) and set the share to 30%
+  with `config` (slot 522277772). A first upgrade, an hour earlier, deployed `0caa61a0…`, the
+  same source built with the Solana CLI's `cargo-build-sbf` 4.4.0 (pitfall 1); every test
+  passed against that binary too, and the second upgrade replaced it.
 - The devnet tool's `config` sets the fees (`TAX_SHARE_BPS`, `LAUNCH_FEE`), and `sweep`
   collects the protocol's tax from every pool (`--dry-run` lists it).
 - SDK 0.2.0: `launchSlot` in `LaunchPool`, `protocolShareAt`, `LAUNCH_BLOCK_SLOTS`, an
@@ -155,8 +157,8 @@ STRESS_SEEDS=30 STRESS_STEPS=1000 cargo test -p sniper-tax-tests --release --tes
 |---|---|
 | Program | `EZwLuZ8mSiBoeKtbHwQK4kxCqqj4JuureT1kHpTK3i6b` (registered with the Pipeline router) |
 | Upgrade authority, config admin and treasury | `CUiq3QQbXMsrgCpiN423zr2NTrdfPRuGUy9EQKQ6CGap`: a wallet only for devnet, created locally by the owner (7.0 devnet SOL on 10 November). Until 10 November all three were on the owner's general wallet `DEwdb…N8tYn`, which now has no role here |
-| Version on devnet | sha256 `9f24dafa0168585de8e15a519a178ed14e6e2bb7d3f8443862eff1db6379f7cd`, upgraded on 10 November 2026 at slot 520838510 (signature `3QJQDcHTB1dmS3YDvwz1KPPQ83eZi9yuzxigk8Ymw8pfWWzmpmN1seVdd7FfnhEDCpojaT5S4cCAQSYbeMURW2Vc`). Before that: `222ee769…` (slot 520494490) |
-| Config | `6wCct5q2tQ2WGfbtLcEzaH756aGnkMuSnnexaHmquL93`: 10% tax share, 0.01 SOL launch fee. `pending_admin` is empty (checked after the upgrade) |
+| Version on devnet | sha256 `db635b29f127a8b249e3b4a83693482abec03cf171a4b3783da0c3cec818e24f` (B14), upgraded on 14 November 2026 at slot 522277672 (signature `szHWz5Eh9JyZsihJ2fSdb6JHziM6q7h27QLrHR3D3aSpryn9Enfe79bNofJB3RweaBA77Q8Bjm5Gv6Kti37Eqkd`). The ProgramData account holds 385,808 bytes; the rest is zeros. Before that: `0caa61a0…` (slot 522265145, the same source from another toolchain), `9f24dafa…` (slot 520838510), `222ee769…` (slot 520494490) |
+| Config | `6wCct5q2tQ2WGfbtLcEzaH756aGnkMuSnnexaHmquL93`: 30% tax share (since slot 522277772, signature `53xjJZi2…`), 0.01 SOL launch fee. `pending_admin` is empty. Pools created before keep their 10% |
 | Demo pool | `GeajhDYc24MyRecNv1a69nSsa2kdUtwbhLec6xpqVG3B` |
 
 **The registration's metadata.** Since 13 November the router registration points at
@@ -295,20 +297,18 @@ In addition, the unchanged source (commit `8bb831b`) built exactly `222ee769…`
 
 ## Open items
 
-1. **Deploy B14 on devnet** (the owner, "Devnet": build, upgrade, check), then set the share
-   to 30% with `config`, and pin `DEVNET_SHA256` in `scripts/check-devnet-program.sh`.
-2. **The launch site** (`MajocoReborn/Pipeline-Sniper-Tax`) moves to SDK 0.2.0 after that:
+1. **The launch site** (`MajocoReborn/Pipeline-Sniper-Tax`) moves to SDK 0.2.0 after that:
    its per-trade split (`history.ts`) and the creator dashboard should use the launch block
    (`protocolShareAt` with each trade's slot), and its texts the 70/30 split.
-3. **Publish the SDK on npm.** The name `@majocoreborn/sniper-tax-sdk` needs the npm scope
+2. **Publish the SDK on npm.** The name `@majocoreborn/sniper-tax-sdk` needs the npm scope
    `majocoreborn` (a user or organisation the owner controls); rename in `sdk/package.json`
    and the imports otherwise, before the first release. Then add `NPM_TOKEN` as a repository
    secret and push a tag `sdk-v0.2.0`. Until then the launch site installs a tarball built
    from a pinned commit of this repository (see its `app/vendor/README.md`).
-4. **Phase 6:** still open from [`SECURITY-REVIEW.md`](SECURITY-REVIEW.md): M1 and M2
+3. **Phase 6:** still open from [`SECURITY-REVIEW.md`](SECURITY-REVIEW.md): M1 and M2
    (operational), L3 (display extensions) and the residual risk of a hook on the quote mint.
    After that, an external audit.
-5. **Before mainnet:**
+4. **Before mainnet:**
    - a dedicated program keypair;
    - the upgrade authority, the config admin and the treasury on a Ledger or a multisig (for
      example Squads with a Ledger as one member). The devnet tool reads only keypair files,

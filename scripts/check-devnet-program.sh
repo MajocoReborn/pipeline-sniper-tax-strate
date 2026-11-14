@@ -11,9 +11,9 @@ cd "$(git rev-parse --show-toplevel)"
 RPC_URL="${RPC_URL:-https://api.devnet.solana.com}"
 PROGRAM_ID="EZwLuZ8mSiBoeKtbHwQK4kxCqqj4JuureT1kHpTK3i6b"
 SO=programs/target/deploy/sniper_tax.so
-# The version on devnet since slot 520838510 (10 November 2026), 375,568 bytes.
-DEVNET_SHA256="9f24dafa0168585de8e15a519a178ed14e6e2bb7d3f8443862eff1db6379f7cd"
-DEVNET_SIZE=375568
+# The version on devnet since slot 522277672 (14 November 2026, B14), 375,712 bytes.
+DEVNET_SHA256="db635b29f127a8b249e3b4a83693482abec03cf171a4b3783da0c3cec818e24f"
+DEVNET_SIZE=375712
 
 rpc() {
   curl -sS --fail -m 60 -X POST "$RPC_URL" -H 'Content-Type: application/json' -d "$1"
@@ -46,8 +46,9 @@ tag, slot = struct.unpack_from("<IQ", raw, 0)
 assert tag == 3, "not UpgradeableLoaderState::ProgramData"
 elf = raw[45:]
 onchain = elf[:size]
-assert not any(elf[size:]), "the account holds more than the pinned version"
 remote = hashlib.sha256(onchain).hexdigest()
+if any(elf[size:]):
+    remote = "a longer binary than the pinned version"
 print(f"program data   {program_data}, last deployed at slot {slot}")
 print(f"on devnet      {remote}")
 print(f"pinned         {expected}")

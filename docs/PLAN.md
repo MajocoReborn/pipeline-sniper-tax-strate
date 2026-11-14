@@ -422,7 +422,7 @@ Pipeline-Sniper-Tax/
 - **Docs in English (10 November):** README, PLAN, HANDOFF and SECURITY-REVIEW translated from Dutch.
 - **Launch site (10 November):** the plan in [`LAUNCH-SITE.md`](https://github.com/MajocoReborn/Pipeline-Sniper-Tax/blob/main/docs/LAUNCH-SITE.md) is approved; milestone 1, the TypeScript client in `app/`, is done.
 - **Own repository (13 November):** the protocol moved from `MajocoReborn/Pipeline-Sniper-Tax` (which keeps the launch site) to `MajocoReborn/pipeline-sniper-tax-strategy`, with the program unchanged (sha256 `9f24dafa…`). The TypeScript client became the npm package in `sdk/`, and [`INTEGRATION.md`](INTEGRATION.md) is the guide for launchpads.
-- **Revenue model B14 (14 November):** the cap on the protocol's share is 30% and the launch block's tax goes to the protocol (`launch_slot` in the pool, `math::protocol_share_at`), with unit, property and integration tests (`launch_block.rs`). `sniper-tax-math` moved into the `programs/` workspace, so the build no longer depends on the repository's path. The new binary has sha256 `db635b29f127a8b249e3b4a83693482abec03cf171a4b3783da0c3cec818e24f`; it is live on devnet once the owner upgrades.
+- **Revenue model B14 (14 November):** the cap on the protocol's share is 30% and the launch block's tax goes to the protocol (`launch_slot` in the pool, `math::protocol_share_at`), with unit, property and integration tests (`launch_block.rs`). `sniper-tax-math` moved into the `programs/` workspace, so the build no longer depends on the repository's path. The new binary has sha256 `db635b29f127a8b249e3b4a83693482abec03cf171a4b3783da0c3cec818e24f`; the owner upgraded devnet to it (slot 522277672) and set the share to 30%.
 
 ## 11. Decisions
 
