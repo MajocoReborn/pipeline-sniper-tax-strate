@@ -299,6 +299,23 @@ impl Env {
         self.svm.set_sysvar::<Clock>(&clock);
     }
 
+    pub fn slot(&self) -> u64 {
+        self.svm.get_sysvar::<Clock>().slot
+    }
+
+    /// Moves `slots` slots ahead without moving the time.
+    pub fn advance_slots(&mut self, slots: u64) {
+        let mut clock = self.svm.get_sysvar::<Clock>();
+        clock.slot += slots;
+        self.svm.set_sysvar::<Clock>(&clock);
+    }
+
+    /// Moves past the launch block (the launch slot and the next), at the same time, so the
+    /// next trades split their tax with the pool's recorded share.
+    pub fn skip_launch_block(&mut self) {
+        self.advance_slots(sniper_tax_math::LAUNCH_BLOCK_SLOTS);
+    }
+
     pub fn funded_keypair(&mut self) -> Keypair {
         let keypair = Keypair::new();
         self.svm.airdrop(&keypair.pubkey(), 100 * SOL).unwrap();
@@ -584,15 +601,28 @@ impl Env {
         )
     }
 
+    /// The creator's `launch`. Afterwards the clock is past the launch block, as in
+    /// `launched_pool`.
     pub fn launch(&mut self, pool: &Pool) -> TxResult {
         let ix = self.launch_ix(pool);
         let creator = pool.creator.insecure_clone();
-        self.send(&[ix], &[&creator])
+        let result = self.send(&[ix], &[&creator]);
+        self.skip_launch_block();
+        result
     }
 
     /// A pool created and launched at `LAUNCH_TS`: `create_market`, both fee accounts and
-    /// `launch` in one transaction, as a front-end would send them.
+    /// `launch` in one transaction, as a front-end would send them. Afterwards the clock is
+    /// still at `LAUNCH_TS`, but past the launch block, so trades see the pool's recorded
+    /// tax split; `launched_pool_in_launch_block` stays in it.
     pub fn launched_pool(&mut self, options: PoolOptions) -> Pool {
+        let pool = self.launched_pool_in_launch_block(options);
+        self.skip_launch_block();
+        pool
+    }
+
+    /// As `launched_pool`, but the clock stays in the launch slot.
+    pub fn launched_pool_in_launch_block(&mut self, options: PoolOptions) -> Pool {
         let pool = self.prepare_pool(options);
         self.set_time(LAUNCH_TS);
         let creator = pool.creator.insecure_clone();

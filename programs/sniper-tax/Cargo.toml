@@ -25,7 +25,7 @@ no-log-ix-name = []
 anchor-lang = { version = "=1.2.2", features = ["init-if-needed"] }
 anchor-spl = "=1.2.2"
 pipeline-strategy-interface = { git = "https://github.com/MetalLegBob/pipeline", rev = "a2d5bfbe62ff61d3ca0ce7a976520da61a0f16c4" }
-sniper-tax-math = { path = "../../crates/sniper-tax-math" }
+sniper-tax-math = { path = "../sniper-tax-math" }
 
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }

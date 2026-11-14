@@ -7,9 +7,10 @@
 //!
 //! A buy (quote mint in, launch token out) pays a sniper tax on its input. The rate starts
 //! at `start_bps` when the pool launches and falls linearly to `end_bps` over
-//! `duration_secs`. The tax is split between the pool's creator and the protocol treasury.
-//! Neither part enters the reserves, so the tax never moves the price. Sells, and trades
-//! by the creator, pay no tax.
+//! `duration_secs`. The tax is split between the pool's creator and the protocol treasury,
+//! except in the launch block (the launch's slot and the next), whose tax all goes to the
+//! protocol. Neither part enters the reserves, so the tax never moves the price. Sells, and
+//! trades by the creator, pay no tax.
 //!
 //! Rounding always favours the pool: the tax rounds up, output rounds down and the input
 //! an exact-out trade needs rounds up. The protocol's share of the tax rounds down, in
@@ -30,10 +31,14 @@ pub const MIN_DURATION_SECS: u32 = 60;
 /// Longest tax window: thirty minutes.
 pub const MAX_DURATION_SECS: u32 = 1_800;
 
-/// Highest share of each tax the protocol treasury may take: 20%.
-pub const MAX_PROTOCOL_TAX_SHARE_BPS: u16 = 2_000;
-/// Share of each tax the protocol treasury takes by default: 10%.
-pub const DEFAULT_PROTOCOL_TAX_SHARE_BPS: u16 = 1_000;
+/// Highest share of each tax the protocol treasury may take: 30%. The launch block is the
+/// exception (see [`LAUNCH_BLOCK_SLOTS`]).
+pub const MAX_PROTOCOL_TAX_SHARE_BPS: u16 = 3_000;
+/// Share of each tax the protocol treasury takes by default: 30%.
+pub const DEFAULT_PROTOCOL_TAX_SHARE_BPS: u16 = 3_000;
+/// The launch block: the slot a pool launched in and the next. The tax on buys landing in it
+/// (bundled and same-block snipes) goes to the protocol in full.
+pub const LAUNCH_BLOCK_SLOTS: u64 = 2;
 
 pub const LAMPORTS_PER_SOL: u64 = 1_000_000_000;
 /// Highest launch fee: 0.05 SOL.
@@ -304,6 +309,19 @@ pub fn accounted_balance(reserve: u64, creator_tax: u64, protocol_fee: u64) -> u
         .saturating_add(protocol_fee)
 }
 
+/// The protocol's share of a tax paid at `slot`: all of it in the launch block, the pool's
+/// recorded share otherwise. `launch_slot` 0 means unknown (pools launched before the launch
+/// block existed), and then the recorded share always applies.
+pub fn protocol_share_at(recorded_share_bps: u16, launch_slot: u64, slot: u64) -> u16 {
+    let in_launch_block =
+        launch_slot != 0 && slot >= launch_slot && slot - launch_slot < LAUNCH_BLOCK_SLOTS;
+    if in_launch_block {
+        BPS as u16
+    } else {
+        recorded_share_bps
+    }
+}
+
 /// Checks protocol fee settings against their caps.
 pub fn validate_protocol_fees(
     protocol_share_bps: u16,
@@ -412,8 +430,8 @@ mod tests {
 
     #[test]
     fn plan_example_ten_sol_sniper_buy() {
-        // A sniper buys for 10 SOL at launch: 9.9 SOL tax, of which 10% (0.99 SOL) goes
-        // to the protocol and 8.91 SOL to the creator; 0.1 SOL trades.
+        // A sniper buys for 10 SOL at launch: 9.9 SOL tax, of which 30% (2.97 SOL) goes
+        // to the protocol and 6.93 SOL to the creator; 0.1 SOL trades.
         let pricing = Pricing {
             reserve_in: 5 * SOL,
             reserve_out: 1_000_000_000_000,
@@ -423,8 +441,8 @@ mod tests {
         let quote = pricing.quote_exact_in(10 * SOL).unwrap();
         assert_eq!(quote.amount_in, 10 * SOL);
         assert_eq!(quote.effective_in, SOL / 10);
-        assert_eq!(quote.protocol_fee, 990_000_000);
-        assert_eq!(quote.creator_tax, 8_910_000_000);
+        assert_eq!(quote.protocol_fee, 2_970_000_000);
+        assert_eq!(quote.creator_tax, 6_930_000_000);
         assert_eq!(quote.new_reserve_in, 5 * SOL + SOL / 10);
         assert_eq!(
             quote.amount_out,
@@ -487,6 +505,34 @@ mod tests {
             (quote.effective_in, quote.creator_tax, quote.amount_out),
             (0, 1, 0)
         );
+    }
+
+    #[test]
+    fn the_launch_block_tax_goes_to_the_protocol() {
+        let share = DEFAULT_PROTOCOL_TAX_SHARE_BPS;
+        // The launch slot and the next.
+        assert_eq!(protocol_share_at(share, 1_000, 1_000), 10_000);
+        assert_eq!(protocol_share_at(share, 1_000, 1_001), 10_000);
+        // From the second slot after, the recorded share.
+        assert_eq!(protocol_share_at(share, 1_000, 1_002), share);
+        assert_eq!(protocol_share_at(share, 1_000, u64::MAX), share);
+        // A slot before the launch can't happen, but never counts as the launch block.
+        assert_eq!(protocol_share_at(share, 1_000, 999), share);
+        // Unknown launch slot (pools launched before this rule): always the recorded share.
+        assert_eq!(protocol_share_at(share, 0, 0), share);
+        assert_eq!(protocol_share_at(share, 0, 1), share);
+        // At the end of the slot range there is no overflow.
+        assert_eq!(protocol_share_at(share, u64::MAX, u64::MAX), 10_000);
+        // A launch-block buy: all of the tax to the protocol, none to the creator.
+        let pricing = Pricing {
+            reserve_in: 5 * SOL,
+            reserve_out: 1_000_000_000_000,
+            tax_bps: 9_900,
+            protocol_share_bps: protocol_share_at(share, 7, 8),
+        };
+        let quote = pricing.quote_exact_in(10 * SOL).unwrap();
+        assert_eq!(quote.protocol_fee, 9_900_000_000);
+        assert_eq!(quote.creator_tax, 0);
     }
 
     #[test]

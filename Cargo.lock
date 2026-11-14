@@ -2376,6 +2376,7 @@ dependencies = [
  "borsh",
  "serde_json",
  "sniper-tax-client",
+ "sniper-tax-math",
  "solana-hash",
  "solana-keypair",
  "solana-signer",

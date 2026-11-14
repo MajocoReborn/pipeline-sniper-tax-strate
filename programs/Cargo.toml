@@ -1,7 +1,7 @@
 # On-chain programs, built with `cargo build-sbf` (4.4 or later, for sBPF v3).
 [workspace]
 resolver = "2"
-members = ["sniper-tax"]
+members = ["sniper-tax", "sniper-tax-math"]
 
 [profile.release]
 overflow-checks = true

@@ -3,8 +3,9 @@
 A launch pool for the [Pipeline](https://github.com/MetalLegBob/pipeline) router on Solana that
 taxes snipers. A buy right after launch pays up to 99% tax, and that tax falls to a small
 permanent rate (at most 5%, often 0%) over a window the creator chooses, from 1 to 30 minutes.
-Sells are never taxed and the creator's own wallet is exempt. The tax goes to the creator (90%
-today) and the protocol (10%). Works with SPL Token and Token-2022. To protect buyers, a pool
+Sells are never taxed and the creator's own wallet is exempt. The tax goes to the creator (70%)
+and the protocol (30%); the tax on buys in the launch block (the launch slot and the next, where
+bundled snipes land) goes to the protocol in full. Works with SPL Token and Token-2022. To protect buyers, a pool
 refuses a launch token with a mint or freeze authority or a transfer hook, and a transfer fee
 that can still change or is above 5%.
 
@@ -20,7 +21,8 @@ TypeScript SDK is in [`sdk/`](sdk) (`@majocoreborn/sniper-tax-sdk`); Rust integr
 
 | Fee | Today (devnet) | Cap in the program |
 |---|---|---|
-| Protocol share of the sniper tax | 10% of the tax | 20%, fixed per pool when it is created |
+| Protocol share of the sniper tax | 30% of the tax | 30%, fixed per pool when it is created |
+| Tax on buys in the launch block (launch slot and the next) | All of it to the protocol | Those two slots only |
 | Launch fee, paid once by the creator | 0.01 SOL | 0.05 SOL; per pool it can only go down |
 | Pipeline's router fee | 0.25% per trade | Set by Pipeline |
 | Integrator fee (your front end's) | What you set | None in the router; the trader signs it |
@@ -43,7 +45,7 @@ Launchpads earn through Pipeline's integrator fee on the trades they route. Deta
 | Path | Contents |
 |---|---|
 | `programs/sniper-tax` | The Anchor program: the Pipeline strategy |
-| `crates/sniper-tax-math` | Pure maths: the tax curve, the tax split and constant-product pricing, with property tests |
+| `programs/sniper-tax-math` | Pure maths: the tax curve, the tax split, the launch block and constant-product pricing, with property tests |
 | `crates/sniper-tax-client` | Addresses, account types and instruction builders, for launchers, scripts and integrators |
 | `crates/sniper-tax-tests` | Integration tests against the real Pipeline router from devnet |
 | `crates/sniper-tax-devnet` | Registration, config, metadata and a demo launch on devnet |

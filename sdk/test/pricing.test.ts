@@ -11,7 +11,10 @@ import {
     quoteExactIn,
     quoteExactOut,
     splitGross,
+    poolPricing,
+    protocolShareAt,
     splitTax,
+    type LaunchPool,
 } from '../src/index.js';
 
 type Opt = string | null;
@@ -19,6 +22,7 @@ const vectors = JSON.parse(readFileSync(new URL('./vectors.json', import.meta.ur
     split_gross: { gross: string; bps: number; effective: string; tax: string }[];
     gross_for_effective: { effective: string; bps: number; gross: Opt }[];
     split_tax: { tax: string; share_bps: number; creator: string; protocol: string }[];
+    launch_block: { recorded_share_bps: number; launch_slot: string; slot: string; share_bps: number }[];
     swaps: { reserve_in: string; reserve_out: string; amount: string; out_given_in: string; in_given_out: Opt }[];
     quotes: {
         reserve_in: string;
@@ -47,6 +51,39 @@ describe('the pool maths matches the Rust crate', () => {
         for (const v of vectors.gross_for_effective) {
             expect(grossForEffective(BigInt(v.effective), v.bps), JSON.stringify(v)).toBe(big(v.gross));
         }
+    });
+
+    it('gives the launch block tax to the protocol', () => {
+        expect(vectors.launch_block.length).toBeGreaterThan(0);
+        for (const v of vectors.launch_block) {
+            expect(
+                protocolShareAt(v.recorded_share_bps, BigInt(v.launch_slot), BigInt(v.slot)),
+                JSON.stringify(v),
+            ).toBe(v.share_bps);
+        }
+    });
+
+    it('prices with the launch block share only when given a slot', () => {
+        const pool = {
+            status: 'live',
+            creator: 'Creator1111111111111111111111111111111111111',
+            reserveQuote: 5_000_000_000n,
+            reserveToken: 1_000_000_000_000n,
+            taxStartBps: 9_900,
+            taxEndBps: 0,
+            taxDurationSecs: 90,
+            protocolTaxShareBps: 3_000,
+            launchTs: 1_000n,
+            launchSlot: 500n,
+        } as unknown as LaunchPool;
+        expect(poolPricing(pool, 'buy', null, 1_000n).protocolShareBps).toBe(3_000);
+        expect(poolPricing(pool, 'buy', null, 1_000n, 500n).protocolShareBps).toBe(10_000);
+        expect(poolPricing(pool, 'buy', null, 1_000n, 501n).protocolShareBps).toBe(10_000);
+        expect(poolPricing(pool, 'buy', null, 1_000n, 502n).protocolShareBps).toBe(3_000);
+        // The trader's side is the same in and out of the launch block.
+        const inBlock = poolPricing(pool, 'buy', null, 1_000n, 500n);
+        const after = poolPricing(pool, 'buy', null, 1_000n, 502n);
+        expect({ ...inBlock, protocolShareBps: 0 }).toEqual({ ...after, protocolShareBps: 0 });
     });
 
     it('shares tax between creator and protocol', () => {

@@ -39,6 +39,8 @@ fn a_hooked_quote_mint_works_for_every_transfer() {
         .expect("launch");
     assert_eq!(env.hook_count(&pool.quote_mint), 1);
     env.assert_solvent(&pool);
+    // Past the launch block, so the tax is split between the creator and the protocol.
+    env.skip_launch_block();
 
     // A taxed exact-out buy: the router sends the maximum in, the program refunds the
     // rest, the router takes its fee. Three hooked transfers.

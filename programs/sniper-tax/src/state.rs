@@ -145,7 +145,10 @@ pub struct LaunchPool {
     pub launch_fee_lamports: u64,
     /// When the pool launched (Unix seconds); 0 while pending.
     pub launch_ts: i64,
-    pub _reserved: [u8; 64],
+    /// The slot the pool launched in; 0 while pending, and for pools launched before this
+    /// field existed. The tax on buys in this slot and the next goes to the protocol.
+    pub launch_slot: u64,
+    pub _reserved: [u8; 56],
 }
 
 /// Owned copies of a pool's PDA seeds, so the pool can sign while it is borrowed mutably.
@@ -244,8 +247,8 @@ impl LaunchPool {
         }
     }
 
-    /// Prices a trade at `now`. Used by both `pipeline_quote` and `pipeline_swap`.
-    pub fn quote(&self, trade: &psi::TradeRequest, now: i64) -> Result<math::Quote> {
+    /// Prices a trade at `now`, in `slot`. Used by both `pipeline_quote` and `pipeline_swap`.
+    pub fn quote(&self, trade: &psi::TradeRequest, now: i64, slot: u64) -> Result<math::Quote> {
         require!(self.status == PoolStatus::Live, SniperError::NotLive);
         let side = Self::side(trade)?;
         let trader_is_creator = trade.trader == Some(self.creator.to_bytes());
@@ -261,7 +264,11 @@ impl LaunchPool {
             reserve_in,
             reserve_out,
             tax_bps,
-            protocol_share_bps: self.protocol_tax_share_bps,
+            protocol_share_bps: math::protocol_share_at(
+                self.protocol_tax_share_bps,
+                self.launch_slot,
+                slot,
+            ),
         };
         match trade.mode {
             psi::TradeMode::ExactIn => pricing.quote_exact_in(trade.amount),

@@ -42,7 +42,8 @@ Every fee a trader or creator can pay, who receives it, and the most it can ever
 | Fee | Paid by | Goes to | Today (devnet) | Cap |
 |---|---|---|---|---|
 | **Sniper tax** | Buyers other than the creator | Creator and protocol, below | The pool's schedule | 99% at launch (`MAX_START_BPS`), 5% after the window (`MAX_END_BPS`) |
-| **Protocol share of the tax** | Out of the tax (not on top of it) | Protocol treasury | 10% of the tax | 20% (`MAX_PROTOCOL_TAX_SHARE_BPS`), fixed per pool |
+| **Protocol share of the tax** | Out of the tax (not on top of it) | Protocol treasury | 30% of the tax | 30% (`MAX_PROTOCOL_TAX_SHARE_BPS`), fixed per pool |
+| **Launch block** | Out of the tax on buys in the launch slot and the next | Protocol treasury | All of that tax | Only those two slots (`LAUNCH_BLOCK_SLOTS`) |
 | **Launch fee** | The creator, once, at `launch` | Protocol treasury | 0.01 SOL | 0.05 SOL (`MAX_LAUNCH_FEE_LAMPORTS`); per pool it can only go down |
 | **Pipeline fee** | Every trader, on top of the input | Pipeline | 0.25% | Fixed by the router |
 | **Integrator fee** | Traders on your front end, on top of the input | You | What you set | None in the router: the trader signs the rate |
@@ -55,11 +56,22 @@ How the caps hold:
   that. Its launch fee is the lower of the recorded and the current fee
   (`launch_fee_due`), so a creator never pays more than was shown when the pool was
   created, and gets any later cut.
-- The creator receives the rest of the tax: 90% today, never less than 80%.
+- The creator receives the rest of the tax: at least 70%, outside the launch block.
+- **The launch block.** The tax on buys landing in the pool's launch slot or the next (bundled
+  and same-block snipes) goes to the protocol in full; the creator gets none of it. From the
+  slot after, the pool's recorded share applies. The trader's side doesn't change: they pay
+  the same tax and receive the same tokens either way. The pool records its launch slot
+  (`launchSlot`); pools launched before this rule show 0 and keep their recorded share.
 
-Example: a sniper buys for 10 SOL at the start of the window with a 99% start rate. 9.9 SOL is
-tax: 8.91 SOL for the creator, 0.99 SOL for the protocol. 0.1 SOL buys tokens. Pipeline
-charges 0.025 SOL on top, and your integrator fee, if any.
+Example: a sniper buys for 10 SOL with a 99% start rate. 9.9 SOL is tax and 0.1 SOL buys
+tokens. Pipeline charges 0.025 SOL on top, and your integrator fee, if any.
+
+- Landing two slots or more after the launch: 6.93 SOL for the creator, 2.97 SOL for the
+  protocol.
+- Landing in the launch slot or the next: all 9.9 SOL for the protocol.
+
+To show a trade's split, pass the slot to `poolPricing(pool, side, trader, now, slot)`, or
+use `protocolShareAt(pool.protocolTaxShareBps, pool.launchSlot, slot)`.
 
 ### Earning as a launchpad: Pipeline's integrator fee
 
@@ -190,7 +202,8 @@ const unclaimed = pool.accruedTaxQuote; // the creator's tax, not yet claimed
 - `now` is the **cluster's** time in Unix seconds (the `Clock` sysvar, or a recent block's
   time), not the browser's clock: the program uses the cluster's.
 - The rate is integer maths identical to the program's, so the number you show is the number
-  the program charges at that second. The creator pays 0 (`applicableTaxBps` with
+  the program charges at that second. In the launch block (`pool.launchSlot` and the next
+  slot) the tax is the same, but all of it goes to the protocol. The creator pays 0 (`applicableTaxBps` with
   `traderIsCreator`), and so does every sell.
 - If you find pools anywhere but on the chain at their own address (an indexer, Pipeline's API),
   check them with `verifyPoolKeys(address, pool)`: it returns the pool's keys only if the

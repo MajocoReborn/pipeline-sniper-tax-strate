@@ -10,6 +10,7 @@ import { describe, expect, it } from 'vitest';
 import {
     ACCOUNT_DISCRIMINATORS,
     INSTRUCTION_DISCRIMINATORS,
+    LAUNCH_BLOCK_SLOTS,
     MAX_DURATION_SECS,
     MAX_END_BPS,
     MAX_LAUNCH_FEE_LAMPORTS,
@@ -91,6 +92,7 @@ describe('constants', () => {
         expect(MAX_DURATION_SECS).toBe(c.max_duration_secs);
         expect(MAX_PROTOCOL_TAX_SHARE_BPS).toBe(c.max_protocol_tax_share_bps);
         expect(MAX_LAUNCH_FEE_LAMPORTS).toBe(BigInt(c.max_launch_fee_lamports));
+        expect(LAUNCH_BLOCK_SLOTS).toBe(BigInt(c.launch_block_slots));
         expect(hex(INSTRUCTION_DISCRIMINATORS.launch)).toBe(c.instruction_discriminators.launch);
         expect(hex(INSTRUCTION_DISCRIMINATORS.claimTax)).toBe(c.instruction_discriminators.claim_tax);
         expect(hex(INSTRUCTION_DISCRIMINATORS.sweepProtocolFees)).toBe(
@@ -244,6 +246,7 @@ describe('accounts', () => {
                 protocol_tax_share_bps: pool!.protocolTaxShareBps,
                 launch_fee_lamports: pool!.launchFeeLamports.toString(),
                 launch_ts: pool!.launchTs.toString(),
+                launch_slot: pool!.launchSlot.toString(),
             }).toEqual(d);
             expect(hex(getLaunchPoolCodec().encode(pool!))).toBe(vector.data.slice(16));
         }
@@ -327,7 +330,8 @@ describe('pool keys from a pool account', () => {
                 protocolTaxShareBps: 1_000,
                 launchFeeLamports: 0n,
                 launchTs: 0n,
-                reserved: new Uint8Array(64),
+                launchSlot: 0n,
+                reserved: new Uint8Array(56),
             },
         };
     }

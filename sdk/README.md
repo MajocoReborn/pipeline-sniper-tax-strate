@@ -13,9 +13,10 @@ TypeScript SDK for the sniper-tax launch pool, a strategy on the
   `quoteIx` and `swapIx` (with an optional integrator fee).
 - **Tax and pricing:** `currentTaxBps`, `taxBpsAt`, `applicableTaxBps`,
   `secondsUntilWindowEnds`, `isValidSchedule`, `quoteExactIn`, `quoteExactOut`,
-  `poolPricing`, with the program's exact integer rounding.
+  `poolPricing` and `protocolShareAt` (the launch block's split), with the program's exact
+  integer rounding.
 - **Caps:** `MAX_START_BPS`, `MAX_END_BPS`, the duration bounds,
-  `MAX_PROTOCOL_TAX_SHARE_BPS` and `MAX_LAUNCH_FEE_LAMPORTS`.
+  `MAX_PROTOCOL_TAX_SHARE_BPS` (30%), `MAX_LAUNCH_FEE_LAMPORTS` and `LAUNCH_BLOCK_SLOTS`.
 
 Every address, instruction byte, account layout, tax rate and quote is tested against vectors
 written by the Rust client (`crates/sniper-tax-client`), which the program's integration

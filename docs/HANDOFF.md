@@ -1,11 +1,34 @@
-# Handoff: current state (13 November 2026)
+# Handoff: current state (14 November 2026)
 
 For a new session. The design and background are in [`PLAN.md`](PLAN.md), the review in
 [`SECURITY-REVIEW.md`](SECURITY-REVIEW.md), and the guide for launchpads in
 [`INTEGRATION.md`](INTEGRATION.md); this document says where everything is, how to test it
 and what to watch out for.
 
-**Latest step (13 November):** the protocol has its own repository,
+**Latest step (14 November): the revenue model B14, in the program, not yet on devnet.**
+The owner chose 70% of the tax for the creator and 30% for the dev, and all of the tax on
+buys in the launch block (the launch slot and the next, where bundled snipes land) for the
+dev. What is taxable is unchanged: buys by anyone but the creator; sells never.
+
+- The program's cap on the protocol share is 30% (was 20%); `setup`'s default is 30%.
+- `launch` records `launch_slot` (in the pool's reserved bytes, so the layout and size are
+  unchanged); `LaunchPool::quote` gives the protocol the whole tax when the trade's slot is
+  `launch_slot` or the next (`math::protocol_share_at`). Pools launched before have
+  `launch_slot = 0` and keep their split. Traders pay and receive exactly the same.
+- `sniper-tax-math` moved into the `programs/` workspace, which makes the build independent
+  of the repository's path (pitfall 1).
+- New binary: sha256 `db635b29f127a8b249e3b4a83693482abec03cf171a4b3783da0c3cec818e24f`,
+  375,712 bytes. Devnet still runs `9f24dafa…` until the owner upgrades ("Devnet"), then sets
+  the share to 30% with `config`.
+- The devnet tool's `config` sets the fees (`TAX_SHARE_BPS`, `LAUNCH_FEE`), and `sweep`
+  collects the protocol's tax from every pool (`--dry-run` lists it).
+- SDK 0.2.0: `launchSlot` in `LaunchPool`, `protocolShareAt`, `LAUNCH_BLOCK_SLOTS`, an
+  optional `slot` in `poolPricing`, the 30% cap.
+- Tests: `launch_block.rs` (7), new unit and property tests in the maths, and every
+  existing test passes against the new binary (the harness steps past the launch block after
+  `launch`, so they check the recorded split).
+
+**Before that (13 November):** the protocol has its own repository,
 `MajocoReborn/pipeline-sniper-tax-strategy`. It came from `MajocoReborn/Pipeline-Sniper-Tax`
 (up to commit `7b7517c`), which keeps the launch site (`app/`) and now installs the
 TypeScript SDK from here. History before the move is in that repository.
@@ -40,15 +63,15 @@ TypeScript SDK from here. History before the move is in that repository.
 | Path | Contents |
 |---|---|
 | `programs/sniper-tax` | The Anchor 1.2.2 program (the Pipeline strategy). `lib.rs` (instructions and account structs), `state.rs`, `policy.rs` (Token-2022 policy), `token.rs` (transfer helper), `errors.rs` |
-| `crates/sniper-tax-math` | Pure maths: the tax curve, the tax split and constant-product. Used by the program |
+| `programs/sniper-tax-math` | Pure maths: the tax curve, the tax split, the launch block and constant-product. Used by the program; a member of the `programs/` workspace (pitfall 1) |
 | `crates/sniper-tax-client` | Addresses (`PoolKeys`, PDAs), mirrored account types and every instruction builder. No LiteSVM, no keypairs. `examples/ts_vectors.rs` writes the SDK's test vectors |
-| `crates/sniper-tax-tests` | LiteSVM harness (`src/lib.rs`, on top of the client crate) and integration tests: `launch_pool.rs` (24), `findings.rs` (6), `extremes.rs` (4), `stress.rs` (2), `transfer_hook.rs` (1) |
+| `crates/sniper-tax-tests` | LiteSVM harness (`src/lib.rs`, on top of the client crate) and integration tests: `launch_pool.rs` (24), `launch_block.rs` (7), `findings.rs` (6), `extremes.rs` (4), `stress.rs` (2), `transfer_hook.rs` (1) |
 | `test-programs/test-hook` | Test transfer hook that counts every transfer, in its own workspace so it doesn't touch the lockfile or the binary of the real program |
-| `crates/sniper-tax-devnet` | Devnet tool on the client crate: `setup` (registration and config), `demo` (a complete launch), `config` (move the treasury, propose a new admin), `accept-admin` (the proposed admin takes over), `metadata` (point the registration at this repository's metadata) |
+| `crates/sniper-tax-devnet` | Devnet tool on the client crate: `setup` (registration and config), `demo` (a complete launch), `config` (the treasury and the fees; propose a new admin), `accept-admin` (the proposed admin takes over), `metadata` (point the registration at this repository's metadata), `sweep` (collect the protocol's tax from every pool) |
 | `sdk/` | The TypeScript SDK, an npm package (`@majocoreborn/sniper-tax-sdk`), tested against `test/vectors.json` from the Rust client |
 | `metadata/sniper-tax.devnet.json` | Strategy metadata for Pipeline terminals |
-| `scripts/build-program.sh` | Builds the program at the fixed path and checks its sha256 (pitfall 1) |
-| `scripts/check-devnet-program.sh` | Checks that the program on devnet is the local binary, byte for byte |
+| `scripts/build-program.sh` | Builds the program and checks its sha256 |
+| `scripts/check-devnet-program.sh` | Checks that devnet runs the pinned version (`DEVNET_SHA256`), and whether that is the local build |
 | `scripts/fetch-pipeline-router.sh` | Fetches the router binary from devnet, pinned by sha256, into `fixtures/pipeline.so` |
 | `scripts/check-no-keypairs.sh` | Refuses keypair files; run by CI and the pre-commit hook (`git config core.hooksPath .githooks`) |
 | `docs/INTEGRATION.md` | Guide for launchpads |
@@ -62,7 +85,7 @@ cargo install cargo-build-sbf --version 4.6.0 --locked   # once; downloads ~1.6 
 scripts/build-program.sh                                 # program -> programs/target/deploy, checked
 (cd test-programs && cargo build-sbf)                    # test hook -> test-programs/target/deploy
 scripts/fetch-pipeline-router.sh                         # router -> fixtures/pipeline.so (needs devnet RPC)
-scripts/check-devnet-program.sh                          # the program on devnet is this binary
+scripts/check-devnet-program.sh                          # devnet runs the pinned version
 cargo test --workspace                                   # all Rust tests, ~30 s
 cargo clippy --workspace --all-targets -- -D warnings
 (cd programs && cargo clippy --all-targets -- -D warnings)
@@ -71,8 +94,7 @@ cargo fmt --all -- --check && (cd programs && cargo fmt --all -- --check)
 (cd sdk && npm run vectors)                              # after changing the Rust client
 ```
 
-`(cd programs && cargo build-sbf)` still works for development, but gives a different hash
-outside `/home/user/Pipeline-Sniper-Tax` (pitfall 1). The tests pass with either.
+`(cd programs && cargo build-sbf)` gives the same binary; the script only adds the check.
 
 Extra:
 
@@ -80,33 +102,34 @@ Extra:
 # Long stress test (60,000 steps, ~20 s in release)
 STRESS_SEEDS=30 STRESS_STEPS=1000 cargo test -p sniper-tax-tests --release --test stress
 # Mutation test of the maths (cargo install cargo-mutants --locked)
-cargo mutants -p sniper-tax-math
+(cd programs && cargo mutants -p sniper-tax-math)
 ```
 
 **Expected results**
 
 | Test | Result |
 |---|---|
-| `sniper-tax-math` | 13 unit tests and 12 property tests (2,000 cases each) |
+| `sniper-tax-math` | 14 unit tests and 14 property tests (2,000 cases each), run by `cargo test --workspace` (the crate is a path dependency inside the repository) |
 | `sniper-tax-client` | 1 unit test (pool address equals the program's seeds) |
 | `launch_pool` | 24 integration tests |
+| `launch_block` | 7 tests: the slot is recorded, the launch slot and the next give the protocol the whole tax, the slot after splits, the trader's side is unchanged, quotes match, the creator and sells stay untaxed, the sweep, and pools launched before keep their split |
 | `extremes` | 4 tests |
 | `stress` | 2 tests |
 | `findings` | 6 tests, one per fixed finding from `SECURITY-REVIEW.md` |
 | `transfer_hook` | 1 test, with the hook on the quote mint, through every path in which the program makes transfers |
-| `sdk` (`npm test`) | 33 tests: constants and caps, every pool's addresses and instructions, the integrator fee, account layouts, 324 tax rates, `verifyPoolKeys`, and 513 pricing cases, all against the Rust vectors |
+| `sdk` (`npm test`) | 35 tests: constants and caps, every pool's addresses and instructions, the integrator fee, account layouts, 324 tax rates, the launch block, `verifyPoolKeys`, and the pricing cases, all against the Rust vectors |
 | Long stress run | 43,139 trades, 12,814 of them taxed buys, without a single broken invariant |
 | Mutation test | 78 of 79 mutants caught. The survivor is equivalent (I3), so `cargo mutants` exits with code 2 |
 
 ## Pitfalls: read this before changing anything
 
-1. **The binary depends on the source, the toolchain and the path.**
+1. **The binary depends on the source and the toolchain, no longer on the path.**
    - Anchor puts the file and line number in error messages, so every shifted line in `programs/sniper-tax/src/*.rs` gives a different binary.
    - `cargo-build-sbf` 4.6.0 (platform tools v1.58) and `programs/Cargo.lock` determine the result.
-   - **The path matters too** (found on 13 November; the earlier handoff said it didn't). `programs/` is its own workspace and `crates/sniper-tax-math` lies outside it, so Cargo identifies that crate by its absolute path. The path goes into the hash in every symbol name, the symbols are ordered by name, and so the layout of the binary moves (its size doesn't). The same source gave `1992abea…` in `/home/user/pipeline-sniper-tax-strategy`, `cbe82f94…` in another directory, and `9f24dafa…` only in `/home/user/Pipeline-Sniper-Tax`, where the cloud sessions built the devnet version. `scripts/build-program.sh` therefore builds there. CI does the same and fails unless the result is `9f24dafa…`, so the tests run against the exact devnet binary.
-   - The current source gives sha256 `9f24dafa0168585de8e15a519a178ed14e6e2bb7d3f8443862eff1db6379f7cd` (375,568 bytes). Pipeline's API and `solana-verify get-program-hash` show the same program as `987678b54d6f68a6…`: they hash the code with its trailing zero bytes removed, not the whole `.so` file.
-   - Devnet runs this version since 10 November (slot 520838510). Before that it ran `222ee7691fe1b9ca344f0831b5b9ead3b863a59ba38c26c5384a105a92f09c3a`.
-   - **The next program change** needs a deploy anyway. Make the build path-independent then: move `sniper-tax-math` inside the `programs/` workspace (or build in a container with a fixed path, as `solana-verify` does) and drop the fixed path from `scripts/build-program.sh`.
+   - **Until 14 November the path mattered too.** `crates/sniper-tax-math` lay outside the `programs/` workspace, so Cargo identified it by its absolute path; the path went into the hash in every symbol name, the symbols are ordered by name, and the layout of the binary moved (its size didn't). The devnet version `9f24dafa…` comes out only with the repository at `/home/user/Pipeline-Sniper-Tax`, where the cloud sessions built it (checked: the same source gave `1992abea…` and `cbe82f94…` elsewhere). To rebuild it, check out `8dba1e0` there and run `cd programs && cargo build-sbf`.
+   - Since then `sniper-tax-math` is a member of `programs/` (`programs/sniper-tax-math`), and the binary is the same wherever the repository is: `db635b29…` came out identically in three different directories.
+   - Pipeline's API and `solana-verify get-program-hash` hash the code with its trailing zero bytes removed, not the whole `.so` file, so they show a different value for the same program.
+   - Keep the maths crate in `programs/`. A crate the program uses that lives outside that workspace brings the path dependence back.
 2. **The program address is in three places:** `declare_id!` in `programs/sniper-tax/src/lib.rs`, `PROGRAM_ID` in `crates/sniper-tax-client/src/lib.rs`, and the metadata JSON. The program keypair only existed in the old cloud environment. A fresh `cargo build-sbf` creates a new keypair in `target/deploy/`. The tests don't need it, because LiteSVM loads the `.so` at the fixed address; only deploying to a new address needs the keypair.
 3. **The `transfer_checked` CPI of `anchor-spl` 1.2.2 does not pass on transfer-hook accounts.** Therefore always use the program's own `token::transfer_checked`, never Anchor's.
 4. **Anchor 1.x refuses the same writable account twice** (`ConstraintDuplicateMutableAccount`), before our own constraints run.
@@ -160,16 +183,15 @@ It prints the current and the new URI and sends `update_metadata`.
    cargo install cargo-build-sbf --version 4.6.0 --locked
    solana-keygen pubkey <path-to-wallet.json>                       # must print CUiq3QQ…6CGap
    ```
-2. Build, from this repository, with the script that builds at the path the devnet version was built at (pitfall 1):
+2. Build, from this repository (anywhere on disk):
 
    ```sh
    git clone https://github.com/MajocoReborn/pipeline-sniper-tax-strategy.git
    cd pipeline-sniper-tax-strategy
-   sudo mkdir -p /home/user && sudo chown "$USER" /home/user   # once
-   scripts/build-program.sh                                    # fails unless the hash is 9f24dafa…
+   scripts/build-program.sh          # fails unless the hash is EXPECTED_SHA256 in the script
    ```
 
-   Expected: `9f24dafa0168585de8e15a519a178ed14e6e2bb7d3f8443862eff1db6379f7cd`, 375,568 bytes. For a changed program, `scripts/build-program.sh --any` prints the new hash instead; don't deploy a binary whose hash you can't explain (a different `cargo-build-sbf`, a changed lockfile or local changes).
+   Expected for the B14 version: `db635b29f127a8b249e3b4a83693482abec03cf171a4b3783da0c3cec818e24f`, 375,712 bytes. For a changed program, `scripts/build-program.sh --any` prints the new hash instead; don't deploy a binary whose hash you can't explain (a different `cargo-build-sbf`, a changed lockfile or local changes).
 3. Upgrade, with the wallet as upgrade authority and as payer:
 
    ```sh
@@ -181,13 +203,26 @@ It prints the current and the new URI and sends `update_metadata`.
    ```
 
    - Keep `--url devnet`. Without it the upgrade goes to the cluster in the local Solana config (`solana config get`).
-   - The new binary is 12,744 bytes larger than the ProgramData account (362,824 bytes). A recent Solana CLI (2.x or later) extends the account itself. If the CLI still reports that the account is too small, extend it first with `solana program extend EZwLuZ8mSiBoeKtbHwQK4kxCqqj4JuureT1kHpTK3i6b 12744 --keypair <path-to-wallet.json> --url devnet`.
-   - The deploy first writes the binary into a buffer (about 1.9 SOL, which comes back) and pays rent for the extra space (about 0.07 SOL).
+   - The B14 binary is 144 bytes larger than the ProgramData account (375,568 bytes). A recent Solana CLI (2.x or later) extends the account itself. If the CLI still reports that the account is too small, extend it first with `solana program extend EZwLuZ8mSiBoeKtbHwQK4kxCqqj4JuureT1kHpTK3i6b 144 --keypair <path-to-wallet.json> --url devnet`.
+   - The deploy first writes the binary into a buffer (about 2.7 SOL, which comes back) and pays rent for the extra space (about 0.001 SOL).
    - If the deploy breaks off halfway, recover the buffer SOL with `solana program close --buffers --keypair <path-to-wallet.json> --url devnet`.
    - The program keypair is not needed, only the upgrade authority.
-4. Check with `scripts/check-devnet-program.sh`, which compares the program on devnet with `programs/target/deploy/sniper_tax.so` (ignoring zeros after the binary if the account was made larger), then update `EXPECTED_SHA256` in `scripts/build-program.sh` and the table above. CI runs both scripts on every push.
+4. Check: set `DEVNET_SHA256` and `DEVNET_SIZE` in `scripts/check-devnet-program.sh` to the new version (for B14: `db635b29…` and 375712), run it, and update the table above. CI runs it on every push, so it fails until the pin matches devnet.
 
-After the upgrade nothing else is needed on-chain: the pool and config layouts are unchanged, and existing pools keep working.
+After the upgrade the pool and config layouts are unchanged, and existing pools keep working.
+
+**After the B14 upgrade:** set the protocol's share to 30% for new pools, signed by the admin:
+
+```sh
+KEYPAIR=<path-to-wallet.json> TAX_SHARE_BPS=3000 cargo run -p sniper-tax-devnet -- config
+```
+
+The old program refuses a share above 20% (`FeeAboveCap`), so this only works after the upgrade. Pools created earlier keep their 10%. To collect the protocol's tax, at any time:
+
+```sh
+KEYPAIR=<path-to-wallet.json> cargo run -p sniper-tax-devnet -- sweep --dry-run   # list
+KEYPAIR=<path-to-wallet.json> cargo run -p sniper-tax-devnet -- sweep             # sweep and unwrap
+```
 
 **The upgrade of 10 November.** The owner deployed the binary built and tested in the cloud session, after checking its sha256 locally, so no local build was needed (for mainnet: build it yourself, or use a verifiable build). The CLI extended the ProgramData account by itself, to exactly 375,568 bytes, and closed the buffer; it cost about 0.067 SOL. Checked afterwards from the cloud session: the on-chain hash matches, the transaction is finalized, the config is intact, and a simulated `pipeline_quote` on the demo pool succeeds (3,775 compute units) with exactly the constant-product output, since its tax window is long over. A new session can also deploy the program to a new address; then change the three places from pitfall 2.
 
@@ -200,7 +235,7 @@ After the upgrade nothing else is needed on-chain: the pool and config layouts a
 
 The new wallet was derived with Phantom's path (`solana-keygen recover 'prompt://?key=0/0'`), so its seed phrase gives the same address in a wallet app. `solana-keygen new` derives without a path, which gives a different address from the same words.
 
-**Administration.** `config` moves the treasury (keeping the fees) and, with `ADMIN`, proposes a new admin. The new admin takes over with `accept-admin`, with their own wallet as `KEYPAIR`. Until then, the current admin stays in charge. The metadata URI in the registration points to `main` of a public repository (see "The registration's metadata").
+**Administration.** `config` sets any of the treasury (`TREASURY`), the protocol's share of the tax (`TAX_SHARE_BPS`, at most 3000) and the launch fee (`LAUNCH_FEE`, in lamports, at most 50,000,000); what isn't set stays. New fees apply to pools created afterwards. With `ADMIN` it proposes a new admin. The new admin takes over with `accept-admin`, with their own wallet as `KEYPAIR`. Until then, the current admin stays in charge. The metadata URI in the registration points to `main` of a public repository (see "The registration's metadata").
 
 ## Cleaned up
 
@@ -260,17 +295,23 @@ In addition, the unchanged source (commit `8bb831b`) built exactly `222ee769…`
 
 ## Open items
 
-1. **Publish the SDK on npm.** The name `@majocoreborn/sniper-tax-sdk` needs the npm scope
+1. **Deploy B14 on devnet** (the owner, "Devnet": build, upgrade, check), then set the share
+   to 30% with `config`, and pin `DEVNET_SHA256` in `scripts/check-devnet-program.sh`.
+2. **The launch site** (`MajocoReborn/Pipeline-Sniper-Tax`) moves to SDK 0.2.0 after that:
+   its per-trade split (`history.ts`) and the creator dashboard should use the launch block
+   (`protocolShareAt` with each trade's slot), and its texts the 70/30 split.
+3. **Publish the SDK on npm.** The name `@majocoreborn/sniper-tax-sdk` needs the npm scope
    `majocoreborn` (a user or organisation the owner controls); rename in `sdk/package.json`
    and the imports otherwise, before the first release. Then add `NPM_TOKEN` as a repository
-   secret and push a tag `sdk-v0.1.0`. Until then the launch site installs a tarball built
+   secret and push a tag `sdk-v0.2.0`. Until then the launch site installs a tarball built
    from a pinned commit of this repository (see its `app/vendor/README.md`).
-2. **Path-independent build** at the next program change (pitfall 1).
-3. **Phase 6:** still open from [`SECURITY-REVIEW.md`](SECURITY-REVIEW.md): M1 and M2
+4. **Phase 6:** still open from [`SECURITY-REVIEW.md`](SECURITY-REVIEW.md): M1 and M2
    (operational), L3 (display extensions) and the residual risk of a hook on the quote mint.
    After that, an external audit.
-4. **Before mainnet:**
+5. **Before mainnet:**
    - a dedicated program keypair;
-   - the treasury and the config admin on a multisig, for example Squads;
+   - the upgrade authority, the config admin and the treasury on a Ledger or a multisig (for
+     example Squads with a Ledger as one member). The devnet tool reads only keypair files,
+     so admin commands from a Ledger need support added first;
    - decide whether to freeze the upgrade authority;
-   - a verifiable build (fixed path or container), so anyone can reproduce the binary.
+   - a verifiable build, so anyone can reproduce the binary.

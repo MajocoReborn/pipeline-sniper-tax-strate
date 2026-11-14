@@ -1,15 +1,19 @@
 #!/usr/bin/env bash
-# Checks that the program on devnet is the binary in programs/target/deploy/sniper_tax.so,
-# byte for byte. Build it first with scripts/build-program.sh. Reads only; needs devnet RPC.
+# Checks that devnet runs the version pinned in DEVNET_SHA256, and says whether that is the
+# binary in programs/target/deploy/sniper_tax.so (build it with scripts/build-program.sh).
+# Reads only; needs devnet RPC. After deploying a new version, update DEVNET_SHA256.
 #
 # The ProgramData account can be larger than the binary (after an extend), with zeros at the
-# end, so only the first <size of the binary> bytes are compared.
+# end; those are cut off before hashing, as `solana-verify get-program-hash` does.
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
 RPC_URL="${RPC_URL:-https://api.devnet.solana.com}"
 PROGRAM_ID="EZwLuZ8mSiBoeKtbHwQK4kxCqqj4JuureT1kHpTK3i6b"
 SO=programs/target/deploy/sniper_tax.so
+# The version on devnet since slot 520838510 (10 November 2026), 375,568 bytes.
+DEVNET_SHA256="9f24dafa0168585de8e15a519a178ed14e6e2bb7d3f8443862eff1db6379f7cd"
+DEVNET_SIZE=375568
 
 rpc() {
   curl -sS --fail -m 60 -X POST "$RPC_URL" -H 'Content-Type: application/json' -d "$1"
@@ -35,19 +39,22 @@ print("1" * (len(raw[4:36]) - len(raw[4:36].lstrip(b"\0"))) + out)
 
 data=$(rpc "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"$program_data\",{\"encoding\":\"base64\"}]}")
 printf '%s' "$data" | python3 -I -c '
-import base64, hashlib, json, struct, sys
-so = open(sys.argv[1], "rb").read()
+import base64, hashlib, json, os, struct, sys
+so_path, program_data, expected, size = sys.argv[1], sys.argv[2], sys.argv[3], int(sys.argv[4])
 raw = base64.b64decode(json.load(sys.stdin)["result"]["value"]["data"][0])
 tag, slot = struct.unpack_from("<IQ", raw, 0)
 assert tag == 3, "not UpgradeableLoaderState::ProgramData"
 elf = raw[45:]
-onchain = elf[: len(so)]
-assert not any(elf[len(so):]), "the account holds more than this binary"
-local = hashlib.sha256(so).hexdigest()
+onchain = elf[:size]
+assert not any(elf[size:]), "the account holds more than the pinned version"
 remote = hashlib.sha256(onchain).hexdigest()
-print(f"program data   {sys.argv[2]}, last deployed at slot {slot}")
-print(f"local binary   {local} ({len(so)} bytes)")
+print(f"program data   {program_data}, last deployed at slot {slot}")
 print(f"on devnet      {remote}")
-sys.exit(0 if local == remote else 1)
-' "$SO" "$program_data" || { echo "The program on devnet is not this binary." >&2; exit 1; }
-echo "The program on devnet is this binary."
+print(f"pinned         {expected}")
+if os.path.exists(so_path):
+    local = hashlib.sha256(open(so_path, "rb").read()).hexdigest()
+    same = "the same as devnet" if local == remote else "not deployed yet"
+    print(f"local build    {local} ({same})")
+sys.exit(0 if remote == expected else 1)
+' "$SO" "$program_data" "$DEVNET_SHA256" "$DEVNET_SIZE" || { echo "Devnet does not run the pinned version." >&2; exit 1; }
+echo "Devnet runs the pinned version."

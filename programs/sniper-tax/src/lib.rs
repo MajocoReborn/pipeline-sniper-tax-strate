@@ -96,7 +96,8 @@ pub mod sniper_tax {
         pool.protocol_tax_share_bps = protocol_tax_share_bps;
         pool.launch_fee_lamports = launch_fee_lamports;
         pool.launch_ts = 0;
-        pool._reserved = [0; 64];
+        pool.launch_slot = 0;
+        pool._reserved = [0; 56];
         Ok(())
     }
 
@@ -134,8 +135,11 @@ pub mod sniper_tax {
     /// Read-only quote at the current clock, with the same maths as `pipeline_swap`.
     /// Anonymous quotes (`trader: None`) pay the tax.
     pub fn pipeline_quote(ctx: Context<ReadTrade>, request: psi::TradeRequest) -> Result<()> {
-        let now = Clock::get()?.unix_timestamp;
-        let quote = ctx.accounts.pool.quote(&request, now)?;
+        let clock = Clock::get()?;
+        let quote = ctx
+            .accounts
+            .pool
+            .quote(&request, clock.unix_timestamp, clock.slot)?;
         let result = psi::QuoteResult {
             amount_in: quote.amount_in,
             amount_out: quote.amount_out,
@@ -190,7 +194,7 @@ pub mod sniper_tax {
         let vault_balance = token::balance(&ctx.accounts.input_vault.to_account_info())?;
         let credited =
             psi::credited_input(vault_balance, pool.input_books(side), request.amount_sent);
-        let now = Clock::get()?.unix_timestamp;
+        let clock = Clock::get()?;
         let quote = pool.quote(
             &psi::TradeRequest {
                 amount: match trade.mode {
@@ -199,7 +203,8 @@ pub mod sniper_tax {
                 },
                 ..trade.clone()
             },
-            now,
+            clock.unix_timestamp,
+            clock.slot,
         )?;
         require!(quote.amount_in <= credited, SniperError::InsufficientInput);
         let refund = credited - quote.amount_in;
@@ -325,7 +330,9 @@ pub mod sniper_tax {
         let pool = &mut ctx.accounts.pool;
         pool.reserve_token = arrived[0];
         pool.reserve_quote = arrived[1];
-        pool.launch_ts = Clock::get()?.unix_timestamp;
+        let clock = Clock::get()?;
+        pool.launch_ts = clock.unix_timestamp;
+        pool.launch_slot = clock.slot;
         pool.status = PoolStatus::Live;
         Ok(())
     }

@@ -28,12 +28,18 @@ export const BPS = 10_000;
 
 /**
  * Hard caps on the protocol's fees, enforced by the program whatever the config's admin sets.
- * The config's current values are lower (10% and 0.01 SOL on devnet); read them with
- * `decodeProtocolConfig`. A pool records both at `create_market`: its share of the tax never
- * changes after that, and its launch fee can only go down (`launch_fee_due`).
+ * Read the config's current values with `decodeProtocolConfig`. A pool records both at
+ * `create_market`: its share of the tax never changes after that, and its launch fee can only
+ * go down (`launch_fee_due`).
  */
-export const MAX_PROTOCOL_TAX_SHARE_BPS = 2_000;
+export const MAX_PROTOCOL_TAX_SHARE_BPS = 3_000;
 export const MAX_LAUNCH_FEE_LAMPORTS = 50_000_000n;
+
+/**
+ * The launch block: the slot a pool launched in and the next. The tax on buys landing in it
+ * goes to the protocol in full (`protocolShareAt`).
+ */
+export const LAUNCH_BLOCK_SLOTS = 2n;
 
 /** Anchor discriminators: the first 8 bytes of sha256("global:<name>") or ("account:<Name>"). */
 export const INSTRUCTION_DISCRIMINATORS = {

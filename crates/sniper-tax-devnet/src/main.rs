@@ -9,13 +9,19 @@
 //! KEYPAIR=deployer.json TREASURY=<address> cargo run -p sniper-tax-devnet -- setup
 //! # Launch a demo token, snipe it at launch, then claim and sweep the tax.
 //! KEYPAIR=deployer.json cargo run -p sniper-tax-devnet -- demo [--wait]
-//! # Move the treasury, and propose a new admin (signed by the current admin). ADMIN is
-//! # optional; the proposed admin takes over with `accept-admin`.
-//! KEYPAIR=admin.json TREASURY=<address> [ADMIN=<address>] cargo run -p sniper-tax-devnet -- config
+//! # Change the config (signed by the current admin): any of the treasury, the protocol's
+//! # share of the tax (basis points) and the launch fee (lamports); what is not set stays.
+//! # ADMIN proposes a new admin, who takes over with `accept-admin`.
+//! KEYPAIR=admin.json [TREASURY=<address>] [TAX_SHARE_BPS=3000] [LAUNCH_FEE=10000000] \
+//!   [ADMIN=<address>] cargo run -p sniper-tax-devnet -- config
 //! # Take over as the proposed admin (signed by that admin).
 //! KEYPAIR=new-admin.json cargo run -p sniper-tax-devnet -- accept-admin
 //! # Point the router registration at METADATA_URI (signed by the upgrade authority).
 //! KEYPAIR=deployer.json cargo run -p sniper-tax-devnet -- metadata
+//! # Sweep the protocol's tax from every pool to the treasury (anyone may send it). When
+//! # KEYPAIR is the treasury itself, the wrapped SOL is unwrapped afterwards.
+//! # `--dry-run` only lists what would be swept.
+//! KEYPAIR=wallet.json cargo run -p sniper-tax-devnet -- sweep [--dry-run]
 //! ```
 //!
 //! `RPC_URL` defaults to `https://api.devnet.solana.com`. `--wait` also buys again after
@@ -43,7 +49,7 @@ const MAX_LISTING_FEE: u64 = 20_000_000;
 
 const SOL: u64 = 1_000_000_000;
 /// Protocol settings `setup` creates the config with.
-const PROTOCOL_SHARE_BPS: u16 = 1_000;
+const PROTOCOL_SHARE_BPS: u16 = sniper_tax_math::DEFAULT_PROTOCOL_TAX_SHARE_BPS;
 const LAUNCH_FEE: u64 = 10_000_000;
 /// Solana's packet limit for a serialised transaction.
 const MAX_TRANSACTION_SIZE: usize = 1_232;
@@ -78,17 +84,29 @@ fn run() -> Result<()> {
         }
         Some("demo") => demo(&rpc, &payer, args.iter().any(|a| a == "--wait")),
         Some("config") => {
-            let treasury = wallet_from_env("TREASURY")?;
+            let current = protocol_config(&rpc)?;
+            let update = ConfigUpdate {
+                treasury: match std::env::var("TREASURY") {
+                    Ok(_) => wallet_from_env("TREASURY")?,
+                    Err(_) => current.treasury,
+                },
+                protocol_tax_share_bps: number_from_env("TAX_SHARE_BPS")?
+                    .unwrap_or(current.protocol_tax_share_bps),
+                launch_fee_lamports: number_from_env("LAUNCH_FEE")?
+                    .unwrap_or(current.launch_fee_lamports),
+            };
             let admin = match std::env::var("ADMIN") {
                 Ok(value) => Some(Pubkey::from_str(&value).map_err(|e| format!("ADMIN: {e}"))?),
                 Err(_) => None,
             };
-            update_config(&rpc, &payer, treasury, admin)
+            update_config(&rpc, &payer, update, admin)
         }
         Some("accept-admin") => accept_admin(&rpc, &payer),
         Some("metadata") => update_metadata(&rpc, &payer),
+        Some("sweep") => sweep(&rpc, &payer, args.iter().any(|a| a == "--dry-run")),
         _ => Err(
-            "usage: sniper-tax-devnet setup | demo [--wait] | config | accept-admin | metadata"
+            "usage: sniper-tax-devnet setup | demo [--wait] | config | accept-admin \
+             | metadata | sweep [--dry-run]"
                 .into(),
         ),
     }
@@ -199,33 +217,51 @@ fn protocol_config(rpc: &Rpc) -> Result<ProtocolConfig> {
     ProtocolConfig::decode(&account.1).ok_or_else(|| "unreadable config".into())
 }
 
-/// Moves the config's treasury, keeping its fees, and proposes `new_admin` if given. The
-/// admin changes only when the proposed admin accepts (`accept-admin`), so a proposal for
-/// an address nobody controls loses nothing: propose another.
+/// A number from the environment, if set.
+fn number_from_env<T: FromStr>(name: &str) -> Result<Option<T>>
+where
+    T::Err: std::fmt::Display,
+{
+    match std::env::var(name) {
+        Ok(value) => value
+            .replace('_', "")
+            .parse()
+            .map(Some)
+            .map_err(|e| format!("{name}: {e}")),
+        Err(_) => Ok(None),
+    }
+}
+
+/// Sets the config's treasury and fees, and proposes `new_admin` if given. New fees apply
+/// to pools created afterwards; existing pools keep theirs. The admin changes only when the
+/// proposed admin accepts (`accept-admin`), so a proposal for an address nobody controls
+/// loses nothing: propose another.
 fn update_config(
     rpc: &Rpc,
     admin: &Keypair,
-    treasury: Pubkey,
+    update: ConfigUpdate,
     new_admin: Option<Pubkey>,
 ) -> Result<()> {
-    let config = protocol_config(rpc)?;
-    let mut ixs = vec![update_config_ix(
-        &admin.pubkey(),
-        &ConfigUpdate {
-            treasury,
-            protocol_tax_share_bps: config.protocol_tax_share_bps,
-            launch_fee_lamports: config.launch_fee_lamports,
-        },
-    )];
+    let mut ixs = vec![update_config_ix(&admin.pubkey(), &update)];
     if let Some(new_admin) = new_admin {
         ixs.push(propose_admin_ix(&admin.pubkey(), &new_admin));
     }
     let signature = rpc.send(&ixs, admin, &[])?;
     let config = protocol_config(rpc)?;
-    if config.treasury != treasury || new_admin.is_some_and(|a| config.pending_admin != a) {
+    if config.treasury != update.treasury
+        || config.protocol_tax_share_bps != update.protocol_tax_share_bps
+        || config.launch_fee_lamports != update.launch_fee_lamports
+        || new_admin.is_some_and(|a| config.pending_admin != a)
+    {
         return Err("the config did not change".into());
     }
-    println!("config treasury {treasury}: {}", explorer(&signature));
+    println!(
+        "config: treasury {}, tax share {} bps, launch fee {} lamports: {}",
+        config.treasury,
+        config.protocol_tax_share_bps,
+        config.launch_fee_lamports,
+        explorer(&signature)
+    );
     if let Some(new_admin) = new_admin {
         println!("proposed admin {new_admin}; it takes over by running `accept-admin`");
     }
@@ -243,6 +279,100 @@ fn accept_admin(rpc: &Rpc, new_admin: &Keypair) -> Result<()> {
         return Err("the admin did not change".into());
     }
     println!("config admin {me}: {}", explorer(&signature));
+    Ok(())
+}
+
+// ---------------------------------------------------------------------------------------
+// sweep
+// ---------------------------------------------------------------------------------------
+
+/// Sweeps the protocol's tax of every pool to the treasury's associated token account,
+/// one pool per transaction. A pool whose quote mint has a transfer hook is skipped (its
+/// sweep needs the hook's accounts). When the signer is the treasury and the tax is wrapped
+/// SOL, the wrapped-SOL account is closed afterwards, which unwraps it.
+fn sweep(rpc: &Rpc, payer: &Keypair, dry_run: bool) -> Result<()> {
+    let config = protocol_config(rpc)?;
+    let treasury = config.treasury;
+    let mut swept = 0u64;
+    let mut wsol_swept = false;
+    for (address, pool) in rpc.pools()? {
+        if pool.accrued_protocol_quote == 0 {
+            continue;
+        }
+        let token_program = rpc.owner(&pool.token_mint)?;
+        let quote_program = rpc.owner(&pool.quote_mint)?;
+        let params = InitParams {
+            creator: pool.creator,
+            tax_start_bps: pool.tax_start_bps,
+            tax_end_bps: pool.tax_end_bps,
+            tax_duration_secs: pool.tax_duration_secs,
+        };
+        let keys = PoolKeys::new(
+            params,
+            pool.token_mint,
+            token_program,
+            pool.quote_mint,
+            quote_program,
+        );
+        if keys.address != address || keys.quote_vault != pool.quote_vault {
+            println!("{address}: not a pool at its own address, skipped");
+            continue;
+        }
+        let treasury_quote =
+            router_pda::associated_token(&treasury, &pool.quote_mint, &quote_program);
+        if dry_run {
+            println!(
+                "{address}: would sweep {} to the treasury {treasury}",
+                pool.accrued_protocol_quote
+            );
+            continue;
+        }
+        let ixs = [
+            ata_ix(&payer.pubkey(), &treasury, &pool.quote_mint, &quote_program),
+            keys.sweep_ix(&treasury, &treasury_quote),
+        ];
+        match rpc.send(&ixs, payer, &[]) {
+            Ok(signature) => {
+                println!(
+                    "{address}: swept {} to the treasury: {}",
+                    pool.accrued_protocol_quote,
+                    explorer(&signature)
+                );
+                if pool.quote_mint == router::wallet::NATIVE_MINT {
+                    swept += pool.accrued_protocol_quote;
+                    wsol_swept = true;
+                }
+            }
+            Err(error) => println!("{address}: not swept: {error}"),
+        }
+    }
+    if dry_run {
+        return Ok(());
+    }
+    if !wsol_swept {
+        println!("nothing in wrapped SOL to sweep");
+        return Ok(());
+    }
+    println!("swept {swept} lamports of wrapped SOL in all");
+    if payer.pubkey() == treasury {
+        let account = router_pda::associated_token(
+            &treasury,
+            &router::wallet::NATIVE_MINT,
+            &router::TOKEN_PROGRAM_ID,
+        );
+        let close = spl_token_2022_interface::instruction::close_account(
+            &router::TOKEN_PROGRAM_ID,
+            &account,
+            &treasury,
+            &treasury,
+            &[],
+        )
+        .map_err(|e| e.to_string())?;
+        let signature = rpc.send(&[close], payer, &[])?;
+        println!("unwrapped to the treasury's SOL: {}", explorer(&signature));
+    } else {
+        println!("the treasury can unwrap by closing its wrapped-SOL account");
+    }
     Ok(())
 }
 
@@ -488,6 +618,38 @@ impl Rpc {
         let (_, data) = self.account(&clock)?.ok_or("no clock sysvar")?;
         let timestamp = data.get(32..40).ok_or("short clock sysvar")?;
         Ok(i64::from_le_bytes(timestamp.try_into().unwrap()))
+    }
+
+    /// The program that owns an account.
+    fn owner(&self, address: &Pubkey) -> Result<Pubkey> {
+        let result = self.call(
+            "getAccountInfo",
+            json!([address.to_string(), {"encoding": "base64", "dataSlice": {"offset": 0, "length": 0}, "commitment": "confirmed"}]),
+        )?;
+        let owner = result["value"]["owner"]
+            .as_str()
+            .ok_or_else(|| format!("{address}: no such account"))?;
+        Pubkey::from_str(owner).map_err(|e| e.to_string())
+    }
+
+    /// Every launch pool of the program, decoded.
+    fn pools(&self) -> Result<Vec<(Pubkey, LaunchPool)>> {
+        let result = self.call(
+            "getProgramAccounts",
+            json!([PROGRAM_ID.to_string(), {"encoding": "base64", "commitment": "confirmed"}]),
+        )?;
+        let mut pools = Vec::new();
+        for entry in result.as_array().ok_or("no program accounts")? {
+            let data = entry["account"]["data"][0].as_str().unwrap_or_default();
+            let data = base64::engine::general_purpose::STANDARD
+                .decode(data)
+                .map_err(|e| e.to_string())?;
+            if let Some(pool) = LaunchPool::decode(&data) {
+                let address = entry["pubkey"].as_str().ok_or("no pubkey")?;
+                pools.push((Pubkey::from_str(address).map_err(|e| e.to_string())?, pool));
+            }
+        }
+        Ok(pools)
     }
 
     /// `(lamports, data)` of an account, if it exists.

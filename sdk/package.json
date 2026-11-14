@@ -1,6 +1,6 @@
 {
     "name": "@majocoreborn/sniper-tax-sdk",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "TypeScript SDK for the sniper-tax launch pool on the Pipeline router: addresses, account decoders, instruction builders, the tax curve and exact quotes",
     "license": "Apache-2.0",
     "repository": {
